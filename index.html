@@ -2,833 +2,489 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BQ Training">
-<meta name="theme-color" content="#10b981">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BQ Training</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#070a08;--surface:#0c110e;--surface2:#111916;--surface3:#172019;
-  --border:#1a2e22;--border2:#244035;--text:#c8ddd2;--text-bright:#e0f0e8;
-  --muted:#4a7060;--dim:#2a4a38;
-  --accent:#34d399;--accent2:#10b981;
-  --accent-light:rgba(52,211,153,0.07);--accent-glow:rgba(52,211,153,0.12);
-  --grad:linear-gradient(135deg,#10b981,#34d399,#6ee7b7);
-  --grad-text:linear-gradient(135deg,#34d399,#6ee7b7);
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;overscroll-behavior:none}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;min-height:100vh;min-height:100dvh;-webkit-font-smoothing:antialiased}
-.mono{font-family:'IBM Plex Mono',monospace}
+  :root {
+    --bg: #0a0a0a;
+    --surface: #0f1a14;
+    --surface2: #111f18;
+    --surface3: #0c1510;
+    --border: #1a2e22;
+    --border2: #243d2c;
+    --text: #e0e8e2;
+    --muted: #3a5244;
+    --dim: #1e2e24;
+    --accent: #1db974;
+    --accent-dim: rgba(29,185,116,0.10);
+    --accent-glow: rgba(29,185,116,0.2);
+    --gold: #c9a84c;
+    --blue: #4a8fc9;
+    --red: #c96060;
+    --cross: #4aaac9;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; min-height:100vh; }
 
-/* ─── NAV ─── */
-.nav{position:sticky;top:0;z-index:100;background:rgba(7,10,8,0.88);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:var(--safe-top) 20px 0}
-.nav-i{max-width:920px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:52px}
-.nav-b{font-weight:700;font-size:15px;color:var(--text-bright);display:flex;align-items:center;gap:8px}
-.nav-b em{font-style:normal;color:var(--accent)}
-.nav-r{display:flex;gap:6px}
-.nb{background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:11px;font-family:inherit;padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .15s;font-weight:500;-webkit-tap-highlight-color:transparent}
-.nb:hover,.nb:active{border-color:var(--border2);color:var(--text);background:var(--surface3)}
-.nb.on{background:var(--accent-light);border-color:var(--accent2);color:var(--accent)}
+  /* NAV */
+  nav {
+    position:sticky; top:0; z-index:100;
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo { display:flex; align-items:center; gap:6px; }
+  .logo-bq { font-size:18px; font-weight:700; color:var(--accent); letter-spacing:-0.5px; }
+  .logo-text { font-size:18px; font-weight:500; color:var(--text); }
+  .nav-btns { display:flex; gap:8px; }
+  .nav-btn {
+    display:flex; align-items:center; gap:5px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:20px; padding:7px 12px;
+    font-size:12px; font-weight:500; color:var(--text);
+    cursor:pointer; font-family:'Space Grotesk',sans-serif;
+    transition:border-color 0.2s;
+  }
+  .nav-btn .ndot { width:7px; height:7px; border-radius:50%; background:#2a4a35; }
 
-/* ─── HERO ─── */
-.hero{background:var(--surface);border-bottom:1px solid var(--border);padding:36px 20px 28px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
-.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.2}
-.hero-i{max-width:920px;margin:0 auto;position:relative}
-.tag{display:inline-flex;align-items:center;gap:8px;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;font-weight:500;font-family:'IBM Plex Mono',monospace}
-.tag::before{content:'';width:20px;height:1px;background:linear-gradient(90deg,transparent,var(--accent))}
-h1{font-size:clamp(34px,6vw,54px);font-weight:700;line-height:1.06;letter-spacing:-1.5px;margin-bottom:6px;color:var(--text-bright)}
-h1 em{font-style:normal;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hsub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;max-width:420px}
+  /* TODAY BANNER */
+  .today-banner {
+    background:var(--surface3);
+    border-bottom:1px solid var(--border);
+    padding:12px 16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .today-icon { font-size:22px; line-height:1; }
+  .today-title { font-size:13px; font-weight:600; color:var(--accent); }
+  .today-sub { font-size:12px; color:var(--muted); margin-top:1px; }
 
-/* ─── PHASE TABS ─── */
-.pts{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap}
-.pt{padding:8px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);font-size:12px;font-family:inherit;font-weight:500;color:var(--muted);transition:all .15s;-webkit-tap-highlight-color:transparent}
-.pt:hover{border-color:var(--border2);color:var(--text)}
-.pt.on{background:var(--accent-light);border-color:var(--accent2);color:var(--accent)}
-.pt small{display:block;font-size:9px;font-family:'IBM Plex Mono',monospace;letter-spacing:.5px;margin-top:2px;opacity:.7}
+  /* HERO — only visible at top */
+  .hero {
+    background: radial-gradient(ellipse at 70% -20%, #0d2a1a 0%, #081410 55%, #0a0a0a 100%);
+    padding:28px 16px 24px;
+    border-bottom:1px solid var(--border);
+  }
+  .phase-tag {
+    display:flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--accent);
+    margin-bottom:14px;
+  }
+  .phase-tag::before { content:'—'; margin-right:2px; }
+  .hero-h1 { font-size:52px; font-weight:700; line-height:1.0; letter-spacing:-1.5px; color:#fff; margin-bottom:2px; }
+  .hero-h1 .green { color:var(--accent); display:block; }
+  .hero-sub { font-size:13px; color:#4a6655; line-height:1.6; margin-bottom:22px; }
 
-/* ─── STATS ─── */
-.sr{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
-.sc{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 16px;min-width:80px;position:relative;overflow:hidden;flex:1}
-.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad);opacity:.45}
-.sv{font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-family:'IBM Plex Mono',monospace}
+  /* PHASE PILLS */
+  .phase-switcher { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .phase-btn {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:9px 14px; cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600;
+    color:#4a6655; text-align:left; min-width:120px; transition:all 0.2s;
+  }
+  .phase-btn-sub { display:block; font-size:10px; font-weight:400; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+  .phase-btn.active { background:var(--accent-dim); border-color:var(--accent); color:var(--accent); }
+  .phase-btn.active .phase-btn-sub { color:rgba(29,185,116,0.6); }
 
-/* ─── PROGRESS ─── */
-.pw{max-width:460px}
-.pm{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
-.ptr{height:3px;background:var(--border);border-radius:2px;position:relative}
-.pfl{height:100%;border-radius:2px;background:var(--grad);transition:width .5s ease;box-shadow:0 0 12px var(--accent-glow);position:relative}
-.pfl::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent-glow)}
+  /* STATS */
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:18px; }
+  .stat-card {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 10px; position:relative; overflow:hidden;
+  }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); opacity:0.35; }
+  .stat-val { font-size:22px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
+  .stat-lbl { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
 
-/* ─── LEGEND ─── */
-.lb{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.li{max-width:920px;margin:0 auto;display:flex;gap:14px;align-items:center;white-space:nowrap}
-.lli{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
-.ld{width:6px;height:6px;border-radius:2px;flex-shrink:0}
+  /* PROGRESS */
+  .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:7px; }
+  .progress-track { height:6px; background:var(--surface2); border-radius:3px; position:relative; overflow:visible; }
+  .progress-fill {
+    height:100%; background:var(--accent); border-radius:3px;
+    transition:width 0.5s ease; position:relative;
+    box-shadow:0 0 8px var(--accent-glow); min-width:12px;
+  }
+  .progress-fill::after {
+    content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%);
+    width:12px; height:12px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 10px var(--accent);
+  }
 
-/* ─── TODAY BANNER ─── */
-.tb{border-bottom:1px solid rgba(52,211,153,0.15);padding:10px 20px;background:var(--accent-light)}
-.tb-i{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.tb-e{font-size:20px;flex-shrink:0}
-.tb-t{font-size:12px;font-weight:600;color:var(--accent)}
-.tb-d{font-size:11px;color:var(--muted)}
+  /* LEGEND */
+  .legend {
+    background:var(--bg); border-bottom:1px solid var(--border);
+    padding:10px 16px; display:flex; gap:14px; overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .legend::-webkit-scrollbar { display:none; }
+  .leg-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .leg-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
 
-/* ─── MAIN ─── */
-main{max-width:920px;margin:0 auto;padding:24px 20px 100px}
+  /* MONTH FILTER */
+  .month-filter { padding:14px 16px 6px; display:flex; flex-wrap:wrap; gap:8px; background:var(--bg); }
+  .mth-btn {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:7px 13px;
+    font-size:12px; font-weight:500; color:var(--muted);
+    cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:all 0.2s;
+  }
+  .mth-btn.active { background:var(--accent-dim); border-color:var(--accent); color:var(--accent); }
 
-/* ─── MONTH FILTER ─── */
-.mf{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px}
-.mfb{padding:6px 11px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--muted);transition:all .15s;letter-spacing:.5px;-webkit-tap-highlight-color:transparent}
-.mfb:hover{border-color:var(--border2);color:var(--text)}
-.mfb.on{background:var(--accent-light);border-color:var(--accent2);color:var(--accent)}
+  /* MAIN */
+  main { background:var(--bg); padding:12px 16px 80px; }
 
-/* ─── MONTH GROUP ─── */
-.mg{margin-bottom:36px}
-.mh{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.ml{flex:1;height:1px;background:linear-gradient(90deg,var(--border2),transparent)}
-.ml.l{background:linear-gradient(270deg,var(--border2),transparent)}
-.mtl{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--dim);white-space:nowrap;font-family:'IBM Plex Mono',monospace}
+  /* MONTH GROUP */
+  .month-group { margin-bottom:24px; }
+  .month-group.hidden { display:none; }
+  .month-hdr {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:10px; padding:0 2px;
+  }
+  .month-line { flex:1; height:1px; background:var(--border); }
+  .month-lbl {
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    text-transform:uppercase; letter-spacing:2px; color:var(--muted);
+    white-space:nowrap;
+  }
 
-/* ─── WEEK CARD ─── */
-.wc{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;overflow:hidden;transition:border-color .2s,box-shadow .2s}
-.wc:hover{border-color:var(--border2)}
-.wc.cb{border-left:2px solid #5b9fd4}
-.wc.dn{border-color:rgba(52,211,153,0.2);box-shadow:0 0 16px var(--accent-glow)}
-.wh{display:flex;align-items:center;padding:12px 14px;cursor:pointer;gap:10px;user-select:none;-webkit-tap-highlight-color:transparent}
-.wh:active{background:rgba(255,255,255,.02)}
-.wn{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);min-width:36px;text-transform:uppercase;letter-spacing:1px}
-.wn strong{display:block;font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;letter-spacing:-.5px}
-.wm{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap}
-.wdiv{width:1px;height:20px;background:var(--border)}
-.wfo{font-size:12px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.wpg{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap}
-.wpg.dn{color:var(--accent)}
-.wck{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.wc.dn .wck{background:var(--accent2);border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow)}
-.chv{color:var(--dim);transition:transform .25s;flex-shrink:0}
-.wc.open .chv{transform:rotate(180deg)}
-.wnote{display:none;margin:0 14px 10px;padding:10px 14px;background:var(--accent-light);border-radius:6px;border-left:2px solid var(--accent2);font-size:12px;color:rgba(52,211,153,0.6);line-height:1.6}
-.wc.open .wnote{display:block}
-.wg{display:none;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;padding:0 14px 14px}
-.wc.open .wg{display:grid}
+  /* WEEK CARD */
+  .week-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; margin-bottom:8px; overflow:hidden;
+    transition:border-color 0.2s;
+  }
+  .week-card.cutback { border-left:3px solid var(--blue); }
+  .week-card.completed-week { border-color:rgba(29,185,116,0.35); }
 
-/* ─── WORKOUT TILE ─── */
-.wt{border-radius:8px;padding:10px;cursor:pointer;transition:all .12s;border:1px solid;-webkit-tap-highlight-color:transparent}
-.wt:active{transform:scale(0.97)}
-.wt.done{opacity:.8}
-.wt-t{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.wt-d{font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--dim)}
-.wt-c{width:12px;height:12px;border-radius:50%;border:1.5px solid var(--border2);transition:all .2s;display:flex;align-items:center;justify-content:center;font-size:7px;color:white}
-.wt.done .wt-c{background:var(--accent2);border-color:var(--accent);box-shadow:0 0 5px var(--accent-glow)}
-.wt-e{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:7px;font-size:14px;border:1px solid}
-.wt-ty{font-size:11px;font-weight:600;margin-bottom:2px}
-.wt-de{font-size:10px;color:var(--muted);line-height:1.5}
+  .week-hdr {
+    display:flex; align-items:center; padding:14px 16px;
+    cursor:pointer; gap:14px; user-select:none;
+  }
+  .week-hdr:active { background:rgba(255,255,255,0.02); }
 
-/* ─── SLIDE PANEL ─── */
-.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:none}
-.overlay.show{display:block}
-.panel{position:fixed;top:0;right:0;bottom:0;z-index:201;width:min(400px,88vw);background:var(--surface);border-left:1px solid var(--border);overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(var(--safe-top) + 20px) 20px calc(var(--safe-bottom) + 20px);transform:translateX(100%);transition:transform .28s ease}
-.panel.show{transform:translateX(0)}
-.pn-t{font-size:18px;font-weight:700;color:var(--text-bright);margin-bottom:4px}
-.pn-s{font-size:12px;color:var(--muted);margin-bottom:20px}
-.pn-x{position:absolute;top:calc(var(--safe-top) + 14px);right:14px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent}
-.sect{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--dim);font-family:'IBM Plex Mono',monospace;margin-bottom:10px;margin-top:18px}
-.trow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
-.trow-l{font-size:13px;color:var(--text)}
-.trow-d{font-size:10px;color:var(--muted);margin-top:2px}
-.tog{width:42px;height:24px;border-radius:12px;background:var(--border2);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0;-webkit-tap-highlight-color:transparent}
-.tog.on{background:var(--accent2)}
-.tog::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
-.tog.on::after{transform:translateX(18px)}
-.inp{background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:inherit;font-size:14px;padding:10px 14px;border-radius:8px;width:100%;outline:none;-webkit-appearance:none}
-.inp:focus{border-color:var(--accent2)}
-.btn{background:var(--grad);color:white;border:none;padding:12px 20px;border-radius:8px;font-family:inherit;font-weight:600;font-size:13px;cursor:pointer;width:100%;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
-.btn:active{opacity:.85}
-.hcard{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:8px}
-.hcard-t{font-size:12px;font-weight:600;color:var(--text-bright);margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.hrow{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;color:var(--muted)}
-.hrow-v{color:var(--text);font-family:'IBM Plex Mono',monospace;font-weight:500}
-.pill-row{display:flex;gap:6px;margin-top:8px}
-.pill{padding:6px 12px;border-radius:6px;cursor:pointer;border:1px solid var(--border);background:var(--surface2);font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--muted);transition:all .15s}
-.pill.on{background:var(--accent-light);border-color:var(--accent2);color:var(--accent)}
+  .wk-num { min-width:36px; }
+  .wk-num-big { font-size:22px; font-weight:700; color:var(--accent); line-height:1; }
+  .wk-num-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:1px; }
 
-/* ─── TOAST ─── */
-.toast{position:fixed;bottom:calc(var(--safe-bottom) + 20px);left:50%;transform:translateX(-50%);background:var(--surface3);border:1px solid var(--border2);color:var(--text);padding:12px 20px;border-radius:10px;font-size:13px;z-index:300;opacity:0;transition:opacity .3s;pointer-events:none;box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.toast.show{opacity:1}
+  .vdiv { width:1px; height:28px; background:var(--border); flex-shrink:0; }
 
-/* ─── INSTALL BANNER ─── */
-.install-banner{background:var(--surface);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;padding:14px 20px calc(var(--safe-bottom) + 14px);z-index:90;display:none;align-items:center;gap:12px}
-.install-banner.show{display:flex}
-.ib-icon{width:40px;height:40px;border-radius:10px;background:var(--accent-light);border:1px solid var(--accent2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ib-text{flex:1}
-.ib-title{font-size:13px;font-weight:600;color:var(--text-bright)}
-.ib-desc{font-size:11px;color:var(--muted)}
-.ib-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px}
-.ib-btn{background:var(--accent2);color:white;border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;white-space:nowrap}
+  .wk-mi { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .wk-prog { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .wk-prog.done { color:var(--accent); }
 
-/* ─── EMPTY HEALTH ─── */
-.health-empty{text-align:center;padding:40px 20px}
+  .complete-ring {
+    width:22px; height:22px; border-radius:50%;
+    border:1.5px solid var(--border2);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.2s;
+  }
+  .completed-week .complete-ring { background:var(--accent); border-color:var(--accent); box-shadow:0 0 8px var(--accent-glow); }
+  .complete-ring svg { display:none; }
+  .completed-week .complete-ring svg { display:block; }
 
-/* ─── STRAVA ─── */
-.strava-week-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:6px}
-.strava-week-label{font-size:9px;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
-.strava-week-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.strava-ws{text-align:center}
-.strava-ws-val{font-size:18px;font-weight:700;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.2}
-.strava-ws-label{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
-.act-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:6px;transition:border-color .15s}
-.act-card:hover{border-color:var(--border2)}
-.act-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.act-type{font-size:11px;font-weight:600;color:var(--text-bright);display:flex;align-items:center;gap:6px}
-.act-date{font-size:9px;font-family:'IBM Plex Mono',monospace;color:var(--muted)}
-.act-stats{display:flex;gap:12px;flex-wrap:wrap}
-.act-stat{display:flex;flex-direction:column}
-.act-stat-val{font-size:13px;font-weight:600;color:var(--text);font-family:'IBM Plex Mono',monospace}
-.act-stat-label{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
-.act-hr{display:inline-flex;align-items:center;gap:3px;font-size:10px;color:#d46e7a;font-family:'IBM Plex Mono',monospace;background:rgba(212,110,122,0.08);padding:2px 8px;border-radius:4px}
+  .chevron { color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
+  .week-card.open .chevron { transform:rotate(180deg); }
 
-@media(max-width:640px){
-  .wfo{display:none}
-  .sr{gap:6px}.sc{min-width:0;padding:10px 12px}.sv{font-size:18px}
-  .wg{grid-template-columns:1fr 1fr}
-  .pts{gap:4px}.pt{padding:6px 12px;font-size:11px}
-}
-@media(max-width:380px){
-  .wg{grid-template-columns:1fr}
-  .sr .sc{flex:1 1 45%}
-}
+  /* EXPANDED */
+  .week-notes {
+    display:none; margin:0 16px 10px;
+    padding:10px 14px; background:var(--accent-dim);
+    border-left:2px solid var(--accent); border-radius:6px;
+    font-size:12px; color:#3a8860; line-height:1.65;
+  }
+  .week-card.open .week-notes { display:block; }
+
+  .workouts-grid {
+    display:none; padding:0 16px 16px;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px;
+  }
+  .week-card.open .workouts-grid { display:grid; }
+
+  /* WORKOUT TILE */
+  .wo-tile {
+    background:var(--surface3); border:1px solid var(--border);
+    border-radius:10px; padding:11px; cursor:pointer; transition:border-color 0.15s;
+  }
+  .wo-tile:active { opacity:0.85; }
+  .wo-tile.done { background:rgba(29,185,116,0.06); border-color:rgba(29,185,116,0.28); }
+
+  .tile-top {
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    text-transform:uppercase; letter-spacing:1px; color:var(--muted);
+    margin-bottom:9px;
+  }
+  .tile-chk {
+    width:13px; height:13px; border-radius:50%;
+    border:1.5px solid var(--border2); transition:all 0.2s; position:relative;
+  }
+  .wo-tile.done .tile-chk { background:var(--accent); border-color:var(--accent); box-shadow:0 0 5px var(--accent-glow); }
+  .wo-tile.done .tile-chk::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#000; font-size:8px; line-height:1; }
+
+  .tile-bubble {
+    width:30px; height:30px; border-radius:7px; border:1px solid;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; margin-bottom:8px;
+  }
+  .tile-type { font-size:11px; font-weight:600; margin-bottom:2px; }
+  .tile-detail { font-size:10px; color:var(--muted); line-height:1.5; }
+
+  .t-rest   .tile-bubble { background:rgba(255,255,255,0.02); border-color:#1a1a1a; }
+  .t-rest   .tile-type   { color:var(--dim); }
+  .t-easy   .tile-bubble { background:rgba(29,185,116,0.07); border-color:rgba(29,185,116,0.18); }
+  .t-easy   .tile-type   { color:var(--accent); }
+  .t-long   .tile-bubble { background:rgba(74,143,201,0.07); border-color:rgba(74,143,201,0.18); }
+  .t-long   .tile-type   { color:var(--blue); }
+  .t-tempo  .tile-bubble { background:rgba(201,168,76,0.07); border-color:rgba(201,168,76,0.18); }
+  .t-tempo  .tile-type   { color:var(--gold); }
+  .t-str    .tile-bubble { background:rgba(201,96,96,0.07); border-color:rgba(201,96,96,0.18); }
+  .t-str    .tile-type   { color:var(--red); }
+  .t-cross  .tile-bubble { background:rgba(74,170,201,0.07); border-color:rgba(74,170,201,0.18); }
+  .t-cross  .tile-type   { color:var(--cross); }
+
+  footer {
+    background:var(--bg); text-align:center; padding:24px 16px;
+    color:var(--dim); font-family:'JetBrains Mono',monospace;
+    font-size:10px; letter-spacing:1px; border-top:1px solid var(--border);
+  }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-i">
-    <div class="nav-b"><em>BQ</em> Training</div>
-    <div class="nav-r">
-      <button class="nb" id="btn-health" onclick="togglePanel('health')">⬡ Strava</button>
-      <button class="nb" id="btn-notif" onclick="togglePanel('notif')">🔔 Alerts</button>
-    </div>
+<nav>
+  <div class="nav-logo"><span class="logo-bq">BQ</span><span class="logo-text">Training</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn"><div class="ndot"></div>Strava</button>
+    <button class="nav-btn">🔔 Alerts</button>
   </div>
 </nav>
 
-<!-- HERO -->
+<div class="today-banner">
+  <div class="today-icon">🏃</div>
+  <div>
+    <div class="today-title" id="today-title">Today's Workout — Week 1</div>
+    <div class="today-sub" id="today-sub">Easy Run: 3 mi easy</div>
+  </div>
+</div>
+
 <div class="hero">
-  <div class="hero-i">
-    <div class="tag" id="hero-tag">Phase 1 · Months 1–6</div>
-    <h1>Boston<br><em>Qualifier</em></h1>
-    <p class="hsub" id="hero-sub">33-Year-Old Female · Rebuild aerobic base from 10–12 mpw to 28–30 mpw · Goal: 28–30 mpw</p>
-    <div class="pts" id="phase-tabs"></div>
-    <div class="sr" id="stats-row"></div>
-    <div class="pw">
-      <div class="pm">
-        <span id="pw-start">Week 1</span>
-        <span id="pw-pct">0% complete</span>
-        <span id="pw-end">Week 24</span>
-      </div>
-      <div class="ptr"><div class="pfl" id="progress-fill" style="width:0%"></div></div>
-    </div>
+  <div class="phase-tag">Phase 1 · Months 1–6</div>
+  <div class="hero-h1">Boston<span class="green">Qualifier</span></div>
+  <div class="hero-sub">33-Year-Old Female · Rebuild aerobic base from 10–12 mpw to 28–30 mpw · Goal: 28–30 mpw</div>
+
+  <div class="phase-switcher">
+<button class="phase-btn active">Phase 1<span class="phase-btn-sub">Base Building</span></button>
+<button class="phase-btn" onclick="window.location.href='phase2.html'">Phase 2<span class="phase-btn-sub">Speed &amp; Half Marathon</span></button>
+<button class="phase-btn" onclick="window.location.href='phase3.html'">Phase 3<span class="phase-btn-sub">Marathon Specific</span></button>
+<button class="phase-btn" onclick="window.location.href='phase4.html'">Phase 4<span class="phase-btn-sub">BQ Attack</span></button>
+</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" id="sv-done">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-wks">0</div><div class="stat-lbl">Weeks</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-pct">0%</div><div class="stat-lbl">Progress</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-rem">168</div><div class="stat-lbl">Remaining</div></div>
+  </div>
+
+  <div class="progress-meta">
+    <span>Week 1</span><span id="pct-lbl">0% complete</span><span>Week 24</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
   </div>
 </div>
 
-<!-- LEGEND -->
-<div class="lb">
-  <div class="li">
-    <div class="lli"><div class="ld" style="background:#3a4a6a"></div>Rest</div>
-    <div class="lli"><div class="ld" style="background:#3db88a"></div>Easy Run</div>
-    <div class="lli"><div class="ld" style="background:#5b9fd4"></div>Long Run</div>
-    <div class="lli"><div class="ld" style="background:#c9a84c"></div>Tempo / Intervals</div>
-    <div class="lli"><div class="ld" style="background:#7ab0c8"></div>Cross-Train</div>
-    <div class="lli"><div class="ld" style="background:#d46e7a"></div>Strength</div>
-    <div class="lli"><div class="ld" style="background:#34d399"></div>Race</div>
-  </div>
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#222"></div>Rest</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1db974"></div>Easy Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a8fc9"></div>Long Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div>Tempo / Intervals</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4aaac9"></div>Cross-Train</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c96060"></div>Strength</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1db974"></div>Race</div>
 </div>
 
-<!-- TODAY BANNER -->
-<div class="tb" id="today-banner" style="display:none">
-  <div class="tb-i">
-    <span class="tb-e" id="today-emoji"></span>
-    <div>
-      <div class="tb-t" id="today-title"></div>
-      <div class="tb-d" id="today-detail"></div>
-    </div>
-  </div>
+<div class="month-filter" id="mth-filter">
+  <button class="mth-btn active" onclick="filterMonth('all',this)">All Months</button>
+  <button class="mth-btn" onclick="filterMonth(1,this)">Month 1</button>
+  <button class="mth-btn" onclick="filterMonth(2,this)">Month 2</button>
+  <button class="mth-btn" onclick="filterMonth(3,this)">Month 3</button>
+  <button class="mth-btn" onclick="filterMonth(4,this)">Month 4</button>
+  <button class="mth-btn" onclick="filterMonth(5,this)">Month 5</button>
+  <button class="mth-btn" onclick="filterMonth(6,this)">Month 6</button>
 </div>
 
-<!-- MAIN -->
-<main id="main-content"></main>
-
-<!-- OVERLAY + PANELS -->
-<div class="overlay" id="overlay" onclick="closePanel()"></div>
-
-<div class="panel" id="panel-notif">
-  <button class="pn-x" onclick="closePanel()">×</button>
-  <div class="pn-t">Notifications</div>
-  <div class="pn-s">Get reminded of your daily workout</div>
-  <div class="trow">
-    <div><div class="trow-l">Daily Workout Reminder</div><div class="trow-d">Push notification with today's workout</div></div>
-    <div class="tog" id="tog-notif" onclick="toggleNotif()"></div>
-  </div>
-  <div class="sect">Notification Time</div>
-  <input type="time" class="inp" id="notif-time" value="07:00" onchange="saveSettings()">
-  <div class="sect">Remind Before (minutes)</div>
-  <div class="pill-row" id="remind-pills"></div>
-  <div class="sect">Schedule Workout Time</div>
-  <input type="time" class="inp" id="workout-time" value="06:30" onchange="saveSettings()">
-  <div style="font-size:10px;color:var(--muted);margin-top:4px" id="remind-desc"></div>
-  <div id="today-preview" style="margin-top:18px"></div>
-  <button class="btn" style="margin-top:18px" onclick="sendTestNotif()">Send Test Notification</button>
-</div>
-
-<div class="panel" id="panel-health">
-  <button class="pn-x" onclick="closePanel()">×</button>
-  <div class="pn-t">Strava</div>
-  <div class="pn-s" id="strava-sub">Connect your Strava account to sync runs</div>
-  <div id="strava-content">
-    <div class="health-empty" id="strava-disconnected">
-      <div style="font-size:40px;margin-bottom:12px">🔶</div>
-      <div style="font-size:14px;color:var(--text-bright);margin-bottom:6px;font-weight:600">Connect Strava</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:18px">Import your runs, pace, heart rate and weekly mileage directly from Strava.</div>
-      <button class="btn" onclick="connectStrava()" id="strava-connect-btn">Connect with Strava</button>
-    </div>
-    <div id="strava-connected" style="display:none">
-      <div class="hcard" id="strava-athlete" style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
-        <div id="strava-avatar" style="width:40px;height:40px;border-radius:50%;background:var(--accent-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏃</div>
-        <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text-bright)" id="strava-name">Athlete</div>
-          <div style="font-size:10px;color:var(--accent);font-family:'IBM Plex Mono',monospace">CONNECTED</div>
-        </div>
-      </div>
-      <div id="strava-loading" style="text-align:center;padding:20px;font-size:12px;color:var(--muted);display:none">
-        <div style="margin-bottom:8px">⏳</div>Loading your activities...
-      </div>
-      <div id="strava-weekly" style="margin-bottom:14px"></div>
-      <div id="strava-activities"></div>
-      <div style="display:flex;gap:8px;margin-top:16px">
-        <button class="btn" style="flex:1" onclick="fetchStravaData()">↻ Refresh</button>
-        <button class="nb" style="flex:0;padding:10px 16px;font-size:12px;border-color:rgba(212,110,122,0.3);color:#d46e7a" onclick="disconnectStrava()">Disconnect</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- INSTALL BANNER -->
-<div class="install-banner" id="install-banner">
-  <div class="ib-icon">🏃</div>
-  <div class="ib-text">
-    <div class="ib-title">Install BQ Training</div>
-    <div class="ib-desc">Add to home screen for the full app experience</div>
-  </div>
-  <button class="ib-btn" id="install-btn" onclick="installApp()">Install</button>
-  <button class="ib-close" onclick="dismissInstall()">×</button>
-</div>
-
-<div class="toast" id="toast"></div>
+<main id="main"></main>
+<footer>Tap any tile to mark complete · Progress saves automatically · Phase 1 · 24 weeks</footer>
 
 <script>
-// ═══════════════════════════════════════════════════════════════════════════
-// DATA — 72 WEEKS
-// ═══════════════════════════════════════════════════════════════════════════
-const W=(w,mi,cb,focus,wo)=>({w,mi,cutback:cb,focus,workouts:wo});
-const D=(day,emoji,type,detail)=>({day,emoji,type,detail});
-
-const P1=[
-W(1,"~12 mi",0,"MONTH 1 — REBUILD · All runs fully conversational. Re-establish habit.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3 mi easy\nConversational pace"),D("Wed","💪","Strength","30 min lower body\nGlutes, hips, squats"),D("Thu","🏃","Easy Run","3 mi easy\n+ 4×20-sec strides"),D("Fri","—","Rest","Rest or light walk"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","4 mi easy\n(11:30–12:30/mi)")]),
-W(2,"~12 mi",0,"CONSISTENCY · Same easy effort. Focus on running without discomfort.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3 mi easy"),D("Wed","💪","Strength","30 min: hip bridges,\nlunges, calf raises"),D("Thu","🏃","Easy Run","3 mi easy\n+ 4×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","4.5 mi easy")]),
-W(3,"~13 mi",0,"ADD VOLUME GENTLY · First week above starting mileage.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3.5 mi easy"),D("Wed","💪","Strength","35 min: deadlifts,\nstep-ups, monster walks"),D("Thu","🏃","Easy Run","3 mi easy"),D("Fri","🏃","Easy Run","2 mi shakeout"),D("Sat","🎯","Long Run","5 mi easy"),D("Sun","🔄","Cross-Train","25 min swim or\nelliptical")]),
-W(4,"~10 mi",1,"⬇ CUTBACK WEEK · Reduce to ~80%. Body absorbs training gains.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","2.5 mi easy"),D("Wed","💪","Strength","30 min maintenance\n(lighter load)"),D("Thu","🏃","Easy Run","2.5 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","4 mi easy")]),
-W(5,"~14 mi",0,"MONTH 2 — STEADY BUILD · Running should feel comfortable and controlled.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3.5 mi easy"),D("Wed","💪","Strength","35 min: planks,\nRDLs, weighted step-ups"),D("Thu","🏃","Easy Run","3.5 mi easy\n+ 6×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2 mi shakeout"),D("Sun","🎯","Long Run","5.5 mi easy")]),
-W(6,"~15 mi",0,"AEROBIC BASE BUILDING · HR <75% max on easy runs.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","35 min full body\nSingle-leg stability"),D("Thu","🏃","Easy Run","3.5 mi easy\n+ 6×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2 mi easy"),D("Sun","🎯","Long Run","6 mi easy")]),
-W(7,"~16 mi",0,"CONSISTENCY COMPOUNDS · Built 12→16 mpw. Stick to easy pace.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","40 min progressive\nloading"),D("Thu","🏃","Easy Run","4 mi easy\n+ 6×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2.5 mi easy"),D("Sun","🎯","Long Run","7 mi easy")]),
-W(8,"~12 mi",1,"⬇ CUTBACK WEEK · Extra sleep. Adaptation happens now.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","3 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","5 mi easy")]),
-W(9,"~18 mi",0,"MONTH 3 — MILESTONE · Approaching pre-injury mileage. Monitor closely.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4.5 mi easy"),D("Wed","💪","Strength","40 min: balance &\nstability focus"),D("Thu","🏃","Easy Run","4 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2.5 mi easy"),D("Sun","🎯","Long Run","8 mi easy")]),
-W(10,"~20 mi",0,"MATCHING PRE-INJURY PEAK · Book a sports massage this week.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","40 min full body\nProgress loading"),D("Thu","🏃","Easy Run","4.5 mi easy\n+ 6×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","9 mi easy")]),
-W(11,"~22 mi",0,"FIRST QUALITY WORKOUT · Brief taste of tempo. Keep it short!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","45 min: increase\nweights on key lifts"),D("Thu","⚡","Moderate Run","5 mi total:\n1.5 warm-up\n2 mi moderate\n1.5 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","10 mi easy")]),
-W(12,"~16 mi",1,"⬇ CUTBACK — 3 MONTHS DONE! · Get a gait analysis. Reflect.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3.5 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","3.5 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","7 mi easy")]),
-W(13,"~24 mi",0,"MONTH 4 — EXCEED PRIOR PEAK · Easy & moderate runs now.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","45 min: Bulgarian\nsplit squats, hip work"),D("Thu","⚡","Moderate Run","6 mi total:\n1.5 warm-up\n3 mi moderate\n1.5 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","11 mi easy")]),
-W(14,"~25 mi",0,"BACK TO PRIOR PEAK MILEAGE · More structure underneath.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5.5 mi easy"),D("Wed","💪","Strength","45 min full body\nGlute med, hip flexors"),D("Thu","⚡","Moderate Run","6 mi total:\n1 warm-up\n4 mi moderate\n1 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","11.5 mi easy")]),
-W(15,"~26 mi",0,"EXCEEDING PRIOR PEAK · First time above 25 mpw post-injury.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min: power focus\nJump squats, bounding"),D("Thu","⚡","Moderate Run","6 mi total:\n1 warm-up\n4 mi moderate\n+ 4×20-sec strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(16,"~20 mi",1,"⬇ CUTBACK — 4 MONTHS DONE · Sign up for a local 5K!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","4 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","9 mi easy")]),
-W(17,"~27 mi",0,"MONTH 5 — FIRST TRUE TEMPO · 10K race effort.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min full body\nRace-prep leg strength"),D("Thu","⚡","Tempo Run","7 mi total:\n1.5 warm-up\n3 mi TEMPO\n1.5 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3.5 mi easy"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(18,"~28 mi",0,"TEMPO PROGRESSION · Extend by 1 mile. Even, consistent effort.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min progressive\nloading"),D("Thu","⚡","Tempo Run","7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(19,"~28 mi",0,"CONSOLIDATE GAINS · Consistency > volume. Rest up for 5K.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min full body"),D("Thu","⚡","Tempo Run","7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(20,"~21 mi",1,"⬇ CUTBACK WEEK · Fresh legs for benchmark 5K race!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","4 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","10 mi easy")]),
-W(21,"~28 mi",0,"MONTH 6 — PEAK MONTH · Longest tempo yet (5 miles).",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min race-prep\nexplosiveness focus"),D("Thu","⚡","Tempo Run","8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(22,"~30 mi",0,"PHASE 1 PEAK MILEAGE · 30 mpw achieved! Peak long: 14 mi.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6.5 mi easy"),D("Wed","💪","Strength","45 min progressive"),D("Thu","⚡","Tempo Run","8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","14 mi easy")]),
-W(23,"~22 mi",0,"BENCHMARK 5K RACE WEEK · Target sub-32:00. Race hard!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","30 min light —\nno soreness pre-race"),D("Thu","⚡","Tempo Run","4 mi total:\n1 warm-up\n2 mi at 5K effort\n1 cool-down"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2 mi shakeout\n+ 4 strides"),D("Sun","🏁","5K Race!","Benchmark race\nTarget: sub-32:00")]),
-W(24,"~20 mi",0,"PHASE 1 COMPLETE · Ready for Phase 2: speed & half marathon!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy\n(tired legs ok)"),D("Wed","💪","Strength","30 min full body\nReturn to normal"),D("Thu","🏃","Easy Run","4 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","9 mi easy\n(just enjoy the miles)")])
+const weeks = [
+  {w:1,m:1,mi:'~12 mi',cb:false,focus:'REBUILD · All runs fully conversational. Re-establish habit. Monitor injury site.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy\nConversational pace'},{d:'Wed',e:'💪',t:'Strength',x:'30 min lower body\nGlutes, hips, squats'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy\n+ 4×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest or light walk'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4 mi easy\n11:30–12:30/mi'}]},
+  {w:2,m:1,mi:'~12 mi',cb:false,focus:'CONSISTENCY · Same easy effort both weeks. Focus on running without discomfort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min: hip bridges,\nlunges, calf raises'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy\n+ 4×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4.5 mi easy'}]},
+  {w:3,m:1,mi:'~13 mi',cb:false,focus:'ADD VOLUME GENTLY · First week above starting mileage. Add Friday shakeout.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min: deadlifts,\nstep-ups, monster walks'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Fri',e:'🏃',t:'Easy Run',x:'2 mi shakeout'},{d:'Sat',e:'🎯',t:'Long Run',x:'5 mi easy'},{d:'Sun',e:'🔄',t:'Cross-Train',x:'25 min swim or\nelliptical'}]},
+  {w:4,m:1,mi:'~10 mi',cb:true,focus:'⬇ CUTBACK WEEK · Reduce to ~80%. Body absorbs training gains. Do not skip!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance\n(lighter load)'},{d:'Thu',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4 mi easy'}]},
+  {w:5,m:2,mi:'~14 mi',cb:false,focus:'STEADY BUILD · Running should feel comfortable and controlled.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min: planks,\nRDLs, weighted step-ups'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout'},{d:'Sun',e:'🎯',t:'Long Run',x:'5.5 mi easy'}]},
+  {w:6,m:2,mi:'~15 mi',cb:false,focus:'AEROBIC BASE BUILDING · HR <75% max on easy runs. Full conversation test.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min full body\nSingle-leg stability'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'6 mi easy'}]},
+  {w:7,m:2,mi:'~16 mi',cb:false,focus:'CONSISTENCY COMPOUNDS · Built 12→16 mpw. Resist going faster.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min progressive\nloading'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'7 mi easy'}]},
+  {w:8,m:2,mi:'~12 mi',cb:true,focus:'⬇ CUTBACK WEEK · Lighter load. Extra sleep. Adaptation happens now.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'5 mi easy'}]},
+  {w:9,m:3,mi:'~18 mi',cb:false,focus:'MILESTONE · Approaching pre-injury mileage. Monitor body closely. Foam roll daily.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min: balance &\nstability focus'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy + strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'8 mi easy'}]},
+  {w:10,m:3,mi:'~20 mi',cb:false,focus:'MATCHING PRE-INJURY PEAK · Running more than before injury. Book a massage.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min full body\nProgress loading'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+  {w:11,m:3,mi:'~22 mi',cb:false,focus:'FIRST QUALITY WORKOUT · Brief moderate effort. Keep it controlled.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min: increase\nweights on key lifts'},{d:'Thu',e:'⚡',t:'Tempo',x:'5 mi total:\n1.5 warm-up\n2 mi moderate\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:12,m:3,mi:'~16 mi',cb:true,focus:'⬇ CUTBACK — 3 MONTHS DONE! · Get a gait analysis. Reflect on progress.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'7 mi easy'}]},
+  {w:13,m:4,mi:'~24 mi',cb:false,focus:'EXCEED PRIOR PEAK · Two workout types now: easy & moderate.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min: Bulgarian\nsplit squats, hip work'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1.5 warm-up\n3 mi moderate\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'11 mi easy'}]},
+  {w:14,m:4,mi:'~25 mi',cb:false,focus:'BACK TO PRIOR PEAK MILEAGE · More fitness underneath than ever before.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body\nGlute med, hip flexors'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1 warm-up\n4 mi moderate\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'11.5 mi easy'}]},
+  {w:15,m:4,mi:'~26 mi',cb:false,focus:'EXCEEDING PRIOR PEAK · First time above 25 mpw post-injury. Celebrate!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min power focus\nJump squats, bounding'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1 warm-up\n4 mi moderate\n+ strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:16,m:4,mi:'~20 mi',cb:true,focus:'⬇ CUTBACK — 4 MONTHS DONE · Sign up for a local 5K in Month 5 or 6!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+  {w:17,m:5,mi:'~27 mi',cb:false,focus:'FIRST TRUE TEMPO · 10K race effort. Short phrases only. Comfortably hard.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body\nRace-prep leg strength'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n3 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:18,m:5,mi:'~28 mi',cb:false,focus:'TEMPO PROGRESSION · Extend tempo by 1 mile. Even, consistent effort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min progressive\nloading'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:19,m:5,mi:'~28 mi',cb:false,focus:'CONSOLIDATE GAINS · Consistency over volume. Rest up for benchmark 5K.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:20,m:5,mi:'~21 mi',cb:true,focus:'⬇ CUTBACK WEEK · Fresh legs for benchmark 5K race coming up!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:21,m:6,mi:'~28 mi',cb:false,focus:'PEAK MONTH · Longest tempo yet (5 miles). You\'ve transformed as a runner.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min race-prep\nexplosiveness'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:22,m:6,mi:'~30 mi',cb:false,focus:'PHASE 1 PEAK · 30 mpw achieved! Peak long run: 14 miles.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min progressive'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:23,m:6,mi:'~22 mi',cb:false,focus:'5K RACE WEEK · Target sub-32:00. Race your heart out!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min light —\nno soreness pre-race'},{d:'Thu',e:'⚡',t:'Tempo',x:'4 mi tune-up:\n1 warm-up\n2 mi at 5K effort\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout\n+ 4 strides'},{d:'Sun',e:'🏁',t:'Race',x:'5K Benchmark\nTarget: sub-32:00'}]},
+  {w:24,m:6,mi:'~20 mi',cb:false,focus:'PHASE 1 COMPLETE · Ready for Phase 2: speed work & half marathon training!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy\n(tired legs ok)'},{d:'Wed',e:'💪',t:'Strength',x:'30 min full body\nReturn to normal'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy\nJust enjoy the miles'}]},
 ];
 
-const P2=[
-W(25,"~28 mi",0,"MONTH 7 — SPEED INTRO · First interval session. Short and controlled.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","40 min: plyometrics intro,\nsingle-leg work"),D("Thu","⚡","Intervals","6 mi total:\n1.5 WU, 6×400m @ 5K pace\nw/ 90s jog, 1.5 CD"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","11 mi easy")]),
-W(26,"~30 mi",0,"BUILDING SPEED ENDURANCE · Focus on recovery between intervals.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5.5 mi easy"),D("Wed","💪","Strength","40 min: hip & glute focus"),D("Thu","⚡","Intervals","6.5 mi total:\n1.5 WU, 8×400m @ 5K pace\nw/ 90s jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(27,"~31 mi",0,"EXTENDING INTERVALS · Move to 800m repeats.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min: power & stability"),D("Thu","⚡","Intervals","7 mi total:\n1.5 WU, 4×800m @ 10K pace\nw/ 2 min jog, 1.5 CD"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","12 mi easy + strides")]),
-W(28,"~24 mi",1,"⬇ CUTBACK WEEK · Let the speed adaptations settle.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","4 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","9 mi easy")]),
-W(29,"~32 mi",0,"MONTH 8 — INTERVAL DEVELOPMENT · Longer reps at threshold.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min: deadlifts,\nlunges, core"),D("Thu","⚡","Intervals","7 mi total:\n1.5 WU, 5×800m @ 10K pace\nw/ 90s jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","3.5 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(30,"~34 mi",0,"MILE REPEATS · First time running full mile repeats.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","45 min progressive loading"),D("Thu","⚡","Intervals","8 mi total:\n1.5 WU, 3×1 mile @ tempo\nw/ 3 min jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13.5 mi easy")]),
-W(31,"~35 mi",0,"LACTATE THRESHOLD · Cruise intervals build half marathon fitness.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6.5 mi easy"),D("Wed","💪","Strength","45 min: race-prep"),D("Thu","⚡","Tempo Run","8 mi total:\n1.5 WU, 5 mi @ HM pace\n1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","14 mi easy")]),
-W(32,"~26 mi",1,"⬇ CUTBACK — 2 MONTHS OF SPEED · Absorb the hard work.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4.5 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","4.5 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","10 mi easy")]),
-W(33,"~36 mi",0,"MONTH 9 — HALF MARATHON PREP · Race-specific long runs begin.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6.5 mi easy"),D("Wed","💪","Strength","45 min: full body power"),D("Thu","⚡","Tempo Run","8 mi total:\n1 WU, 6 mi @ HM pace\n1 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","15 mi\n(last 3 at HM pace)")]),
-W(34,"~37 mi",0,"RACE SIMULATION · Practice fueling on the long run.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","45 min: taper prep"),D("Thu","⚡","Intervals","8 mi total:\n1.5 WU, 4×1 mile @ tempo\nw/ 2 min jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","15.5 mi\n(last 4 at HM pace)")]),
-W(35,"~38 mi",0,"PEAK HM PREP · Longest run before half marathon taper.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","40 min maintenance"),D("Thu","⚡","Tempo Run","9 mi total:\n1.5 WU, 6 mi @ HM pace\n1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","16 mi\n(last 3 at HM pace)")]),
-W(36,"~28 mi",1,"⬇ CUTBACK WEEK · Stay sharp but fresh for race month.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","30 min light"),D("Thu","⚡","Tempo Run","5 mi total:\n1 WU, 3 mi @ HM pace, 1 CD"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","11 mi easy")]),
-W(37,"~38 mi",0,"MONTH 10 — PEAK TRAINING · Highest weekly volume of Phase 2.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","45 min full body"),D("Thu","⚡","Intervals","9 mi total:\n1.5 WU, 6×1K @ 10K pace\nw/ 90s jog, 1.5 CD"),D("Fri","🏃","Easy Run","3.5 mi recovery"),D("Sat","🏃","Easy Run","4.5 mi easy"),D("Sun","🎯","Long Run","16 mi\n(4 mi at HM pace)")]),
-W(38,"~40 mi",0,"PHASE 2 PEAK MILEAGE · 40 mpw achieved!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7.5 mi easy"),D("Wed","💪","Strength","45 min progressive"),D("Thu","⚡","Tempo Run","9 mi total:\n1.5 WU, 6 mi @ HM pace\n1.5 CD"),D("Fri","🏃","Easy Run","3.5 mi recovery"),D("Sat","🏃","Easy Run","4.5 mi easy"),D("Sun","🎯","Long Run","16.5 mi easy")]),
-W(39,"~38 mi",0,"HOLDING PEAK · Maintain mileage. Focus on quality.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","40 min maintenance"),D("Thu","⚡","Intervals","8 mi total:\n1.5 WU, 5×1K @ 10K pace\nw/ 2 min jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","16 mi\n(last 5 progressive)")]),
-W(40,"~30 mi",1,"⬇ CUTBACK — PEAK DONE · Recovery before race block.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","30 min light"),D("Thu","🏃","Easy Run","5 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(41,"~36 mi",0,"MONTH 11 — HALF MARATHON BLOCK · 3 weeks to race day.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","40 min maintenance only"),D("Thu","⚡","Tempo Run","8 mi total:\n1 WU, 6 mi @ HM pace, 1 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","14 mi\n(last 4 at HM pace)")]),
-W(42,"~34 mi",0,"SHARPENING · Last hard long run before taper.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6.5 mi easy"),D("Wed","💪","Strength","35 min light & quick"),D("Thu","⚡","Intervals","7 mi total:\n1 WU, 4×1 mile @ 10K pace\nw/ 2 min jog, 1 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(43,"~26 mi",0,"TAPER WEEK · Reduce volume 30%. Stay sharp.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","25 min very light"),D("Thu","⚡","Tempo Run","5 mi total:\n1 WU, 3 mi @ HM pace, 1 CD"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","2 mi shakeout\n+ 4 strides"),D("Sun","🏁","Half Marathon!","Race day!\nTarget: sub-2:20")]),
-W(44,"~18 mi",0,"POST-RACE RECOVERY · Celebrate! Easy running only.",[D("Mon","—","Rest","Rest (celebrate!)"),D("Tue","—","Rest","Rest"),D("Wed","🏃","Easy Run","3 mi very easy"),D("Thu","—","Rest","Rest"),D("Fri","🏃","Easy Run","3 mi easy"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","7 mi easy\n(just enjoy)")]),
-W(45,"~24 mi",0,"MONTH 12 — RECOVERY & TRANSITION · Rebuild after half marathon.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","35 min: rebuild routine"),D("Thu","🏃","Easy Run","5 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","9 mi easy")]),
-W(46,"~28 mi",0,"REBUILDING · Easing back toward full training.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5.5 mi easy"),D("Wed","💪","Strength","40 min progressive"),D("Thu","⚡","Moderate Run","6 mi total:\n1 WU, 4 mi moderate, 1 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","3.5 mi easy"),D("Sun","🎯","Long Run","10 mi easy")]),
-W(47,"~30 mi",0,"BASE RESET · Re-establish 30 mpw before Phase 3.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","40 min full body"),D("Thu","⚡","Tempo Run","7 mi total:\n1.5 WU, 4 mi tempo, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","11 mi easy")]),
-W(48,"~25 mi",0,"PHASE 2 COMPLETE · Ready for marathon-specific training!",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","5 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","9 mi easy\n(celebrate the journey!)")])
-];
+const mNames = {1:'Month 1 — Rebuild',2:'Month 2 — Steady Build',3:'Month 3 — Milestone',4:'Month 4 — Exceed Prior Peak',5:'Month 5 — First Tempo',6:'Month 6 — Peak'};
 
-const P3=[
-W(49,"~32 mi",0,"MONTH 13 — MARATHON BASE · Rebuild volume with marathon focus.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","40 min marathon-prep"),D("Thu","⚡","Marathon Pace","7 mi total:\n1.5 WU, 4 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(50,"~34 mi",0,"MARATHON PACE INTRO · Getting familiar with BQ goal pace.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6.5 mi easy"),D("Wed","💪","Strength","40 min hip & glute"),D("Thu","⚡","Marathon Pace","8 mi total:\n1.5 WU, 5 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(51,"~36 mi",0,"VOLUME BUILDING · Back to pre-half mileage.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","45 min progressive"),D("Thu","⚡","Intervals","8 mi total:\n1.5 WU, 6×1K @ 10K pace\nw/ 90s jog, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","14 mi\n(last 3 at MP)")]),
-W(52,"~28 mi",1,"⬇ CUTBACK — 1 YEAR OF TRAINING! · Incredible milestone.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","5 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","10 mi easy")]),
-W(53,"~38 mi",0,"MONTH 14 — GOAL PACE WORK · Marathon pace becomes the focus.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","45 min power & stability"),D("Thu","⚡","Marathon Pace","9 mi total:\n1.5 WU, 6 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4.5 mi easy"),D("Sun","🎯","Long Run","15 mi\n(last 4 at MP)")]),
-W(54,"~40 mi",0,"EXTENDING MP RUNS · Longer marathon-pace segments.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7.5 mi easy"),D("Wed","💪","Strength","45 min single-leg focus"),D("Thu","⚡","Marathon Pace","10 mi total:\n1.5 WU, 7 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","3.5 mi recovery"),D("Sat","🏃","Easy Run","4.5 mi easy"),D("Sun","🎯","Long Run","16 mi\n(last 5 at MP)")]),
-W(55,"~42 mi",0,"FIRST 40+ WEEK · Breaking new mileage territory.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","8 mi easy"),D("Wed","💪","Strength","45 min race-specific"),D("Thu","⚡","Intervals","9 mi total:\n1.5 WU, 4×1 mi @ HM pace\nw/ 2 min jog, 1.5 CD"),D("Fri","🏃","Easy Run","3.5 mi recovery"),D("Sat","🏃","Easy Run","5 mi easy"),D("Sun","🎯","Long Run","17 mi\n(last 4 at MP)")]),
-W(56,"~32 mi",1,"⬇ CUTBACK WEEK · Recovery before peak volume.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5.5 mi easy"),D("Wed","💪","Strength","30 min light"),D("Thu","⚡","Marathon Pace","6 mi total:\n1 WU, 4 mi @ MP, 1 CD"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(57,"~44 mi",0,"MONTH 15 — PEAK VOLUME · Highest mileage of entire program.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","8 mi easy"),D("Wed","💪","Strength","40 min maintenance"),D("Thu","⚡","Marathon Pace","10 mi total:\n1.5 WU, 7 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","4 mi recovery"),D("Sat","🏃","Easy Run","5 mi easy"),D("Sun","🎯","Long Run","18 mi\n(last 5 at MP)")]),
-W(58,"~46 mi",0,"APPROACHING PEAK · Longest long run of the program.",[D("Mon","🔄","Cross-Train","30 min easy swim\nor bike"),D("Tue","🏃","Easy Run","8 mi easy"),D("Wed","💪","Strength","40 min light & quick"),D("Thu","⚡","Intervals","9 mi total:\n1 WU, 5×1 mi @ HM pace\nw/ 90s jog, 1 CD"),D("Fri","🏃","Easy Run","4 mi recovery"),D("Sat","🏃","Easy Run","5 mi easy"),D("Sun","🎯","Long Run","20 mi\n(last 6 progressive)")]),
-W(59,"~48 mi",0,"PEAK WEEK · Maximum training load. Listen to your body.",[D("Mon","🔄","Cross-Train","30 min easy"),D("Tue","🏃","Easy Run","8.5 mi easy"),D("Wed","💪","Strength","35 min very light"),D("Thu","⚡","Marathon Pace","10 mi total:\n1.5 WU, 7 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","4 mi recovery"),D("Sat","🏃","Easy Run","5.5 mi easy"),D("Sun","🎯","Long Run","20 mi\n(last 8 at MP)")]),
-W(60,"~36 mi",1,"⬇ CUTBACK — PEAK DONE! · Critical recovery week.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","30 min maintenance"),D("Thu","🏃","Easy Run","6 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","13 mi easy")]),
-W(61,"~44 mi",0,"MONTH 16 — RACE SPECIFICITY · Simulate race conditions.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","8 mi easy"),D("Wed","💪","Strength","35 min maintenance"),D("Thu","⚡","Marathon Pace","10 mi total:\n1.5 WU, 7 mi @ MP, 1.5 CD"),D("Fri","🏃","Easy Run","4 mi recovery"),D("Sat","🏃","Easy Run","5 mi easy"),D("Sun","🎯","Long Run","18 mi\n(practice race nutrition)")]),
-W(62,"~44 mi",0,"DRESS REHEARSAL · Wear race gear. Practice everything.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","8 mi easy"),D("Wed","💪","Strength","35 min light"),D("Thu","⚡","Intervals","9 mi total:\n1 WU, 3×2 mi @ MP\nw/ 3 min jog, 1 CD"),D("Fri","🏃","Easy Run","4 mi recovery"),D("Sat","🏃","Easy Run","5 mi easy"),D("Sun","🎯","Long Run","18 mi\n(8 at MP, practice fueling)")]),
-W(63,"~40 mi",0,"CONFIDENCE BUILDER · You're ready. Trust the training.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7.5 mi easy"),D("Wed","💪","Strength","30 min very light"),D("Thu","⚡","Marathon Pace","8 mi total:\n1 WU, 6 mi @ MP, 1 CD"),D("Fri","🏃","Easy Run","3.5 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","16 mi\n(last 5 at MP)")]),
-W(64,"~32 mi",1,"⬇ CUTBACK · Begin mental prep for taper.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5.5 mi easy"),D("Wed","💪","Strength","25 min maintenance"),D("Thu","🏃","Easy Run","5.5 mi easy + strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(65,"~36 mi",0,"MONTH 17 — TAPER BEGINS · Reduce volume, maintain intensity.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","7 mi easy"),D("Wed","💪","Strength","30 min light"),D("Thu","⚡","Marathon Pace","7 mi total:\n1 WU, 5 mi @ MP, 1 CD"),D("Fri","🏃","Easy Run","3 mi recovery"),D("Sat","🏃","Easy Run","4 mi easy"),D("Sun","🎯","Long Run","14 mi\n(last 4 at MP)")]),
-W(66,"~30 mi",0,"TAPER CONTINUES · Volume drops. Keep legs fresh.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","6 mi easy"),D("Wed","💪","Strength","25 min very light"),D("Thu","⚡","Marathon Pace","6 mi total:\n1 WU, 4 mi @ MP, 1 CD"),D("Fri","🏃","Easy Run","3 mi easy"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","12 mi easy")]),
-W(67,"~24 mi",0,"RACE WEEK MINUS ONE · Short, sharp sessions only.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","5 mi easy"),D("Wed","💪","Strength","20 min activation only"),D("Thu","⚡","Marathon Pace","5 mi total:\n1 WU, 3 mi @ MP, 1 CD"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy + strides"),D("Sun","🎯","Long Run","8 mi easy")]),
-W(68,"~20 mi",1,"⬇ EASY WEEK · Absorb all training. Stay calm and confident.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","20 min activation"),D("Thu","🏃","Easy Run","4 mi easy + 4 strides"),D("Fri","—","Rest","Rest"),D("Sat","—","Rest","Rest"),D("Sun","🏃","Easy Run","6 mi easy")]),
-W(69,"~18 mi",0,"MONTH 18 — RACE WEEK · This is what you trained 18 months for.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","🏃","Easy Run","3 mi easy\n+ 4 strides"),D("Thu","—","Rest","Rest"),D("Fri","🏃","Easy Run","2 mi shakeout"),D("Sat","—","Rest","Carb load.\nLay out gear."),D("Sun","🏁","BOSTON MARATHON!","26.2 miles\nTarget: sub-3:35\nYOU DID IT!")]),
-W(70,"~10 mi",0,"POST-MARATHON RECOVERY · Walk before you run. Be patient.",[D("Mon","—","Rest","Rest (celebrate!)"),D("Tue","—","Rest","Rest"),D("Wed","🏃","Easy Run","2 mi very easy\nwalk/jog"),D("Thu","—","Rest","Rest"),D("Fri","🏃","Easy Run","2 mi easy"),D("Sat","—","Rest","Rest"),D("Sun","🏃","Easy Run","3 mi easy\n(if feeling good)")]),
-W(71,"~14 mi",0,"RECOVERY CONTINUES · Gentle return to running.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","3 mi very easy"),D("Wed","🔄","Cross-Train","30 min easy swim\nor bike"),D("Thu","🏃","Easy Run","3 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🏃","Easy Run","4 mi easy")]),
-W(72,"~18 mi",0,"PROGRAM COMPLETE! · 18 months. Boston Qualifier. Incredible.",[D("Mon","—","Rest","Rest"),D("Tue","🏃","Easy Run","4 mi easy"),D("Wed","💪","Strength","30 min rebuild"),D("Thu","🏃","Easy Run","4 mi easy"),D("Fri","—","Rest","Rest"),D("Sat","🏃","Easy Run","3 mi easy"),D("Sun","🎯","Long Run","6 mi celebration run!\n🎉 You did it!")])
-];
+function tc(t) {
+  const s = t.toLowerCase();
+  if (s==='rest') return 't-rest';
+  if (s.includes('easy')) return 't-easy';
+  if (s.includes('long')) return 't-long';
+  if (s.includes('tempo')||s.includes('moderate')||s.includes('race')) return 't-tempo';
+  if (s.includes('strength')) return 't-str';
+  if (s.includes('cross')) return 't-cross';
+  return 't-rest';
+}
 
-const PHASES=[
-  {id:"p1",label:"Phase 1",sub:"Base Building",months:"Months 1–6",goal:"28–30 mpw",desc:"Rebuild aerobic base from 10–12 mpw to 28–30 mpw",mg:[{l:"Month 1 — Rebuild",w:[1,2,3,4]},{l:"Month 2 — Steady Build",w:[5,6,7,8]},{l:"Month 3 — Milestone",w:[9,10,11,12]},{l:"Month 4 — Exceed Prior Peak",w:[13,14,15,16]},{l:"Month 5 — First True Tempo",w:[17,18,19,20]},{l:"Month 6 — Peak Month",w:[21,22,23,24]}],weeks:P1},
-  {id:"p2",label:"Phase 2",sub:"Speed & Half Marathon",months:"Months 7–12",goal:"35–40 mpw",desc:"Build speed, race a half marathon, peak at 40 mpw",mg:[{l:"Month 7 — Speed Introduction",w:[25,26,27,28]},{l:"Month 8 — Interval Development",w:[29,30,31,32]},{l:"Month 9 — Half Marathon Prep",w:[33,34,35,36]},{l:"Month 10 — Peak Training",w:[37,38,39,40]},{l:"Month 11 — Half Marathon Race",w:[41,42,43,44]},{l:"Month 12 — Recovery & Transition",w:[45,46,47,48]}],weeks:P2},
-  {id:"p3",label:"Phase 3",sub:"Marathon Specific",months:"Months 13–18",goal:"45–55 mpw",desc:"Marathon-specific training, taper & race Boston",mg:[{l:"Month 13 — Marathon Base",w:[49,50,51,52]},{l:"Month 14 — Goal Pace Work",w:[53,54,55,56]},{l:"Month 15 — Peak Volume",w:[57,58,59,60]},{l:"Month 16 — Race Specificity",w:[61,62,63,64]},{l:"Month 17 — Taper",w:[65,66,67,68]},{l:"Month 18 — Race!",w:[69,70,71,72]}],weeks:P3}
-];
+function load() { try { return JSON.parse(localStorage.getItem('bq_p1')||'{}'); } catch(e) { return {}; } }
+function save(s) { try { localStorage.setItem('bq_p1',JSON.stringify(s)); } catch(e) {} }
+let S = load();
 
-// ═══════════════════════════════════════════════════════════════════════════
-// STATE
-// ═══════════════════════════════════════════════════════════════════════════
-let state={completed:{},phase:"p1",month:"all",notifEnabled:false,notifTime:"07:00",remindBefore:30,workoutTime:"06:30",strava:{accessToken:null,refreshToken:null,expiresAt:0,athlete:null}};
-let openWeeks={};
+const total = weeks.reduce((a,w)=>a+w.wo.length,0);
 
-function load(){try{const s=localStorage.getItem("bq_pwa");if(s)state={...state,...JSON.parse(s)};}catch(e){}}
-function save(){try{localStorage.setItem("bq_pwa",JSON.stringify(state));}catch(e){}}
-load();
+function getDayWorkout() {
+  const m = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+  const today = m[new Date().getDay()];
+  for (const w of weeks) {
+    if (w.wo.every((_,i)=>S[`w${w.w}_${i}`])) continue;
+    const wo = w.wo.find(x=>x.d===today && x.t!=='Rest');
+    if (wo) return {week:w.w, wo};
+  }
+  return null;
+}
 
-// ═══════════════════════════════════════════════════════════════════════════
-// TYPE COLORS
-// ═══════════════════════════════════════════════════════════════════════════
-const TC={rest:{bg:"rgba(42,52,80,0.3)",bd:"rgba(42,52,80,0.6)",tx:"#3a4a6a"},easy:{bg:"rgba(61,184,138,0.08)",bd:"rgba(61,184,138,0.25)",tx:"#3db88a"},long:{bg:"rgba(91,159,212,0.08)",bd:"rgba(91,159,212,0.25)",tx:"#5b9fd4"},tempo:{bg:"rgba(201,168,76,0.08)",bd:"rgba(201,168,76,0.25)",tx:"#c9a84c"},strength:{bg:"rgba(212,110,122,0.08)",bd:"rgba(212,110,122,0.25)",tx:"#d46e7a"},cross:{bg:"rgba(122,176,200,0.08)",bd:"rgba(122,176,200,0.25)",tx:"#7ab0c8"},race:{bg:"rgba(52,211,153,0.1)",bd:"rgba(52,211,153,0.3)",tx:"#34d399"}};
-function tk(t){const l=t.toLowerCase();if(l.includes("rest"))return"rest";if(l.includes("easy"))return"easy";if(l.includes("long"))return"long";if(l.includes("cross"))return"cross";if(l.includes("strength"))return"strength";if(l.includes("race")||l.includes("marathon!"))return"race";if(l.includes("tempo")||l.includes("moderate")||l.includes("interval")||l.includes("pace"))return"tempo";return"rest";}
+function stats() {
+  const done = Object.values(S).filter(Boolean).length;
+  const wksDone = weeks.filter(w=>w.wo.every((_,i)=>S[`w${w.w}_${i}`])).length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('sv-done').textContent = done;
+  document.getElementById('sv-wks').textContent = wksDone;
+  document.getElementById('sv-pct').textContent = pct+'%';
+  document.getElementById('sv-rem').textContent = total-done;
+  document.getElementById('prog-fill').style.width = Math.max(pct,0.5)+'%';
+  document.getElementById('pct-lbl').textContent = pct+'% complete';
 
-// ═══════════════════════════════════════════════════════════════════════════
-// RENDER
-// ═══════════════════════════════════════════════════════════════════════════
-function getPhase(){return PHASES.find(p=>p.id===state.phase);}
+  const tw = getDayWorkout();
+  document.getElementById('today-title').textContent = tw ? `Today's Workout — Week ${tw.week}` : 'Rest Day';
+  document.getElementById('today-sub').textContent = tw ? `${tw.wo.t}: ${tw.wo.x.split('\n')[0]}` : 'No workout today — recover well!';
 
-function render(){
-  const ph=getPhase();
-  // Hero
-  document.getElementById("hero-tag").textContent=ph.label+" · "+ph.months;
-  document.getElementById("hero-sub").textContent="33-Year-Old Female · "+ph.desc+" · Goal: "+ph.goal;
-
-  // Phase tabs
-  let ptH="";PHASES.forEach(p=>{ptH+=`<button class="pt${state.phase===p.id?" on":""}" onclick="setPhase('${p.id}')">${p.label}<small>${p.sub}</small></button>`;});
-  document.getElementById("phase-tabs").innerHTML=ptH;
-
-  // Stats
-  const total=ph.weeks.reduce((s,w)=>s+w.workouts.length,0);
-  const done=ph.weeks.reduce((s,w)=>s+w.workouts.filter((_,i)=>state.completed[state.phase+"_w"+w.w+"_"+i]).length,0);
-  const wksDone=ph.weeks.filter(w=>w.workouts.every((_,i)=>state.completed[state.phase+"_w"+w.w+"_"+i])).length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById("stats-row").innerHTML=[[done,"Done"],[wksDone,"Weeks"],[pct+"%","Progress"],[total-done,"Remaining"]].map(([v,l])=>`<div class="sc"><div class="sv">${v}</div><div class="sl">${l}</div></div>`).join("");
-  document.getElementById("pw-start").textContent="Week "+ph.weeks[0].w;
-  document.getElementById("pw-end").textContent="Week "+ph.weeks[ph.weeks.length-1].w;
-  document.getElementById("pw-pct").textContent=pct+"% complete";
-  document.getElementById("progress-fill").style.width=pct+"%";
-
-  // Month filter
-  const main=document.getElementById("main-content");
-  let html=`<div class="mf"><button class="mfb${state.month==="all"?" on":""}" onclick="setMonth('all')">All Months</button>`;
-  ph.mg.forEach((m,i)=>{html+=`<button class="mfb${state.month==="m"+i?" on":""}" onclick="setMonth('m${i}')">${m.l.split("—")[0].trim()}</button>`;});
-  html+=`</div>`;
-
-  const filtered=state.month==="all"?ph.mg:ph.mg.filter((_,i)=>"m"+i===state.month);
-
-  filtered.forEach(month=>{
-    html+=`<div class="mg"><div class="mh"><div class="ml l"></div><div class="mtl">${month.l}</div><div class="ml"></div></div>`;
-    month.w.forEach(wNum=>{
-      const w=ph.weeks.find(x=>x.w===wNum);if(!w)return;
-      const d=w.workouts.filter((_,i)=>state.completed[state.phase+"_w"+w.w+"_"+i]).length;
-      const comp=d===w.workouts.length;
-      const isOpen=openWeeks[w.w];
-      html+=`<div class="wc${w.cutback?" cb":""}${comp?" dn":""}${isOpen?" open":""}">`;
-      html+=`<div class="wh" onclick="toggleWeek(${w.w})">`;
-      html+=`<div class="wn"><strong>${w.w}</strong>WK</div>`;
-      html+=`<div class="wm">${w.mi}</div><div class="wdiv"></div>`;
-      html+=`<div class="wfo">${w.focus.includes("·")?w.focus.split("·")[1].trim():w.focus}</div>`;
-      html+=`<span class="wpg${comp?" dn":""}">${d}/${w.workouts.length}</span>`;
-      html+=`<div class="wck">${comp?'<svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>':""}</div>`;
-      html+=`<svg class="chv" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>`;
-      html+=`</div>`;
-      html+=`<div class="wnote">${w.focus}</div>`;
-      html+=`<div class="wg">`;
-      w.workouts.forEach((wo,i)=>{
-        const k=tk(wo.type),c=TC[k],isDone=!!state.completed[state.phase+"_w"+w.w+"_"+i];
-        html+=`<div class="wt${isDone?" done":""}" style="background:${c.bg};border-color:${c.bd}" onclick="toggleWO(${w.w},${i})">`;
-        html+=`<div class="wt-t"><div class="wt-d">${wo.day}</div><div class="wt-c">${isDone?"✓":""}</div></div>`;
-        html+=`<div class="wt-e" style="background:${c.bg};border-color:${c.bd}">${wo.emoji}</div>`;
-        html+=`<div class="wt-ty" style="color:${c.tx}">${wo.type}</div>`;
-        html+=`<div class="wt-de">${wo.detail.replace(/\n/g,"<br>")}</div></div>`;
-      });
-      html+=`</div></div>`;
-    });
-    html+=`</div>`;
+  weeks.forEach(w=>{
+    const card = document.querySelector(`[data-w="${w.w}"]`);
+    if (!card) return;
+    const d = w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length;
+    card.querySelector('.wk-prog').textContent = `${d}/${w.wo.length}`;
+    card.querySelector('.wk-prog').className = 'wk-prog'+(d===w.wo.length?' done':'');
+    card.classList.toggle('completed-week', d===w.wo.length);
   });
-
-  main.innerHTML=html;
-
-  // Today banner
-  renderToday();
-  // Notification panel state
-  renderNotifPanel();
-  renderHealthPanel();
 }
 
-function renderToday(){
-  const ph=getPhase();
-  const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  const today=days[new Date().getDay()];
-  let found=null;
-  for(const w of ph.weeks){
-    const idx=w.workouts.findIndex(x=>x.day===today);
-    if(idx>=0&&!state.completed[state.phase+"_w"+w.w+"_"+idx]){found={week:w.w,wo:w.workouts[idx]};break;}
-  }
-  const banner=document.getElementById("today-banner");
-  if(found){
-    banner.style.display="";
-    document.getElementById("today-emoji").textContent=found.wo.emoji;
-    document.getElementById("today-title").textContent="Today's Workout — Week "+found.week;
-    document.getElementById("today-detail").textContent=found.wo.type+": "+found.wo.detail.split("\n")[0];
-  } else {banner.style.display="none";}
-}
-
-function renderNotifPanel(){
-  const tog=document.getElementById("tog-notif");
-  tog.className="tog"+(state.notifEnabled?" on":"");
-  document.getElementById("notif-time").value=state.notifTime;
-  document.getElementById("workout-time").value=state.workoutTime;
-  document.getElementById("remind-desc").textContent="Reminders fire "+state.remindBefore+" min before this time";
-
-  let pills="";[15,30,60].forEach(m=>{pills+=`<div class="pill${state.remindBefore===m?" on":""}" onclick="setRemind(${m})">${m} min</div>`;});
-  document.getElementById("remind-pills").innerHTML=pills;
-
-  // Today preview
-  const ph=getPhase();const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];const today=days[new Date().getDay()];
-  let found=null;for(const w of ph.weeks){const idx=w.workouts.findIndex(x=>x.day===today);if(idx>=0&&!state.completed[state.phase+"_w"+w.w+"_"+idx]){found={week:w.w,wo:w.workouts[idx]};break;}}
-  if(found&&state.notifEnabled){
-    document.getElementById("today-preview").innerHTML=`<div class="sect">Today's Preview</div><div class="hcard"><div class="hcard-t">${found.wo.emoji} ${found.wo.type}</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Week ${found.week} · ${found.wo.detail.split("\n").join(" · ")}</div></div>`;
-  } else {document.getElementById("today-preview").innerHTML="";}
-}
-
-function renderHealthPanel(){
-  const connected = state.strava && state.strava.accessToken;
-  document.getElementById("strava-disconnected").style.display = connected ? "none" : "";
-  document.getElementById("strava-connected").style.display = connected ? "" : "none";
-  document.getElementById("strava-sub").textContent = connected
-    ? "Syncing runs, pace & heart rate" : "Connect your Strava account to sync runs";
-  if (connected && state.strava.athlete) {
-    document.getElementById("strava-name").textContent =
-      (state.strava.athlete.firstname || "") + " " + (state.strava.athlete.lastname || "");
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// ACTIONS
-// ═══════════════════════════════════════════════════════════════════════════
-function setPhase(id){state.phase=id;state.month="all";openWeeks={};save();render();}
-function setMonth(m){state.month=m;save();render();}
-function toggleWeek(n){openWeeks[n]=!openWeeks[n];render();}
-function toggleWO(wn,i){const k=state.phase+"_w"+wn+"_"+i;state.completed[k]?delete state.completed[k]:(state.completed[k]=true);save();render();}
-
-function togglePanel(name){
-  const o=document.getElementById("overlay");
-  const pN=document.getElementById("panel-notif");
-  const pH=document.getElementById("panel-health");
-  const bN=document.getElementById("btn-notif");
-  const bH=document.getElementById("btn-health");
-  const showing=document.querySelector(".panel.show");
-  if(showing){
-    showing.classList.remove("show");o.classList.remove("show");
-    bN.classList.remove("on");bH.classList.remove("on");
-    if((name==="notif"&&showing===pN)||(name==="health"&&showing===pH))return;
-  }
-  const target=name==="notif"?pN:pH;
-  target.classList.add("show");o.classList.add("show");
-  (name==="notif"?bN:bH).classList.add("on");
-}
-function closePanel(){
-  document.querySelectorAll(".panel.show").forEach(p=>p.classList.remove("show"));
-  document.getElementById("overlay").classList.remove("show");
-  document.getElementById("btn-notif").classList.remove("on");
-  document.getElementById("btn-health").classList.remove("on");
-}
-
-function toggleNotif(){
-  state.notifEnabled=!state.notifEnabled;save();renderNotifPanel();
-  if(state.notifEnabled&&"Notification"in window){
-    Notification.requestPermission().then(p=>{flash(p==="granted"?"Notifications enabled!":"Allow notifications in Settings");});
-  } else if(state.notifEnabled){flash("Notifications enabled");}
-}
-function toggleHealth(){
-  // Handled by Strava connect/disconnect
-}
-function saveSettings(){
-  state.notifTime=document.getElementById("notif-time").value;
-  state.workoutTime=document.getElementById("workout-time").value;
-  save();renderNotifPanel();
-}
-function setRemind(m){state.remindBefore=m;save();renderNotifPanel();}
-
-function sendTestNotif(){
-  const ph=getPhase();const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];const today=days[new Date().getDay()];
-  let found=null;for(const w of ph.weeks){const idx=w.workouts.findIndex(x=>x.day===today);if(idx>=0){found=w.workouts[idx];break;}}
-  if(found&&"Notification"in window&&Notification.permission==="granted"){
-    new Notification("BQ Training",{body:"Today: "+found.type+" — "+found.detail.split("\n")[0],icon:"icon-192.png"});
-  }
-  flash("Test notification sent!");
-}
-
-// Toast
-let toastTimer;
-function flash(msg){
-  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
-  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),3000);
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// PWA / INSTALL
-// ═══════════════════════════════════════════════════════════════════════════
-let deferredPrompt;
-window.addEventListener("beforeinstallprompt",e=>{
-  e.preventDefault();deferredPrompt=e;
-  document.getElementById("install-banner").classList.add("show");
-});
-function installApp(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(r=>{deferredPrompt=null;document.getElementById("install-banner").classList.remove("show");if(r.outcome==="accepted")flash("App installed!");});}
-  else{flash("Tap Share → Add to Home Screen");}
-}
-function dismissInstall(){document.getElementById("install-banner").classList.remove("show");}
-
-// Service worker
-if("serviceWorker"in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
-
-// Daily notification scheduler
-function scheduleDaily(){
-  if(!state.notifEnabled||!("Notification"in window)||Notification.permission!=="granted")return;
-  const [h,m]=state.notifTime.split(":").map(Number);
-  const now=new Date();const target=new Date();target.setHours(h,m,0,0);
-  if(target<=now)target.setDate(target.getDate()+1);
-  const ms=target-now;
-  setTimeout(()=>{
-    const ph=getPhase();const days=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];const today=days[new Date().getDay()];
-    for(const w of ph.weeks){const idx=w.workouts.findIndex(x=>x.day===today);
-      if(idx>=0&&!state.completed[state.phase+"_w"+w.w+"_"+idx]){
-        new Notification("BQ Training",{body:"Today: "+w.workouts[idx].type+" — "+w.workouts[idx].detail.split("\n")[0],icon:"icon-192.png"});break;
-      }
-    }
-    scheduleDaily();
-  },ms);
-}
-scheduleDaily();
-
-// Show iOS install hint
-if(/iPhone|iPad/.test(navigator.userAgent)&&!window.navigator.standalone){
-  setTimeout(()=>{
-    if(!localStorage.getItem("bq_dismiss_ios")){
-      document.getElementById("install-banner").classList.add("show");
-      document.getElementById("install-btn").textContent="How to Install";
-      document.getElementById("install-btn").onclick=()=>{flash("Tap the Share button ↑ then 'Add to Home Screen'");};
-    }
-  },2000);
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// STRAVA INTEGRATION
-// ═══════════════════════════════════════════════════════════════════════════
-const STRAVA_CLIENT_ID = localStorage.getItem("bq_strava_client_id") || "";
-
-function getRedirectURI() {
-  return window.location.origin + window.location.pathname;
-}
-
-function connectStrava() {
-  let cid = STRAVA_CLIENT_ID;
-  if (!cid) {
-    cid = prompt("Enter your Strava API Client ID:\n\n(Create one at strava.com/settings/api)\nSet the 'Authorization Callback Domain' to your site's domain.");
-    if (!cid) return;
-    localStorage.setItem("bq_strava_client_id", cid.trim());
-  }
-  const authURL = "https://www.strava.com/oauth/authorize?" + new URLSearchParams({
-    client_id: cid.trim(),
-    response_type: "code",
-    redirect_uri: getRedirectURI(),
-    approval_prompt: "auto",
-    scope: "read,activity:read_all"
-  }).toString();
-  window.location.href = authURL;
-}
-
-function disconnectStrava() {
-  if (!confirm("Disconnect Strava? Your training progress will be kept.")) return;
-  state.strava = { accessToken: null, refreshToken: null, expiresAt: 0, athlete: null };
-  save();
-  document.getElementById("strava-weekly").innerHTML = "";
-  document.getElementById("strava-activities").innerHTML = "";
-  renderHealthPanel();
-  flash("Strava disconnected");
-}
-
-async function handleStravaCallback() {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  if (!code) return;
-  window.history.replaceState({}, "", window.location.pathname);
-  flash("Connecting to Strava...");
-  try {
-    const resp = await fetch("/.netlify/functions/strava-auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ grant_type: "authorization_code", code: code })
-    });
-    const data = await resp.json();
-    if (data.error) { flash("Auth error: " + data.error); return; }
-    state.strava = {
-      accessToken: data.access_token,
-      refreshToken: data.refresh_token,
-      expiresAt: data.expires_at,
-      athlete: data.athlete
-    };
-    save(); renderHealthPanel();
-    flash("Connected to Strava!");
-    fetchStravaData();
-  } catch (err) {
-    flash("Connection failed — check your setup");
-    console.error("Strava auth error:", err);
-  }
-}
-
-async function ensureFreshToken() {
-  const now = Math.floor(Date.now() / 1000);
-  if (state.strava.expiresAt && state.strava.expiresAt > now + 300) return true;
-  if (!state.strava.refreshToken) return false;
-  try {
-    const resp = await fetch("/.netlify/functions/strava-auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ grant_type: "refresh_token", refresh_token: state.strava.refreshToken })
-    });
-    const data = await resp.json();
-    if (data.error) return false;
-    state.strava.accessToken = data.access_token;
-    state.strava.refreshToken = data.refresh_token;
-    state.strava.expiresAt = data.expires_at;
-    save(); return true;
-  } catch (err) { return false; }
-}
-
-async function fetchStravaData() {
-  if (!state.strava.accessToken) return;
-  const loading = document.getElementById("strava-loading");
-  if (loading) loading.style.display = "";
-  const fresh = await ensureFreshToken();
-  if (!fresh) {
-    if (loading) loading.style.display = "none";
-    flash("Session expired — reconnect Strava");
-    state.strava = { accessToken:null, refreshToken:null, expiresAt:0, athlete:null };
-    save(); renderHealthPanel(); return;
-  }
-  try {
-    const resp = await fetch("https://www.strava.com/api/v3/athlete/activities?per_page=30", {
-      headers: { "Authorization": "Bearer " + state.strava.accessToken }
-    });
-    if (!resp.ok) throw new Error("API " + resp.status);
-    const activities = await resp.json();
-    if (loading) loading.style.display = "none";
-    renderStravaActivities(activities);
-  } catch (err) {
-    if (loading) loading.style.display = "none";
-    flash("Failed to load activities");
-  }
-}
-
-function renderStravaActivities(activities) {
-  const runs = activities.filter(a => ["Run","Walk","TrailRun","VirtualRun"].includes(a.type));
-  const now = new Date();
-
-  // Weekly mileage (last 4 weeks)
-  let weeklyHTML = '<div class="sect">Weekly Mileage</div>';
-  for (let i = 0; i < 4; i++) {
-    const wEnd = new Date(now); wEnd.setDate(wEnd.getDate() - (i * 7));
-    const wStart = new Date(wEnd); wStart.setDate(wStart.getDate() - 7);
-    const wr = runs.filter(a => { const d = new Date(a.start_date); return d >= wStart && d < wEnd; });
-    const mi = wr.reduce((s, a) => s + a.distance / 1609.34, 0);
-    const tm = wr.reduce((s, a) => s + a.moving_time, 0);
-    const hrs = wr.filter(a => a.average_heartrate);
-    const avgHR = hrs.length ? Math.round(hrs.reduce((s, a) => s + a.average_heartrate, 0) / hrs.length) : null;
-    const label = i === 0 ? "This Week" : i === 1 ? "Last Week" : i + " Weeks Ago";
-    weeklyHTML += `<div class="strava-week-card"><div class="strava-week-label">${label} · ${wr.length} run${wr.length !== 1 ? "s" : ""}</div><div class="strava-week-stats"><div class="strava-ws"><div class="strava-ws-val">${mi.toFixed(1)}</div><div class="strava-ws-label">Miles</div></div><div class="strava-ws"><div class="strava-ws-val">${fmtDur(tm)}</div><div class="strava-ws-label">Time</div></div><div class="strava-ws"><div class="strava-ws-val">${avgHR||"—"}</div><div class="strava-ws-label">Avg HR</div></div></div></div>`;
-  }
-  document.getElementById("strava-weekly").innerHTML = weeklyHTML;
-
-  // Recent activities
-  let html = '<div class="sect" style="margin-top:14px">Recent Runs</div>';
-  const recent = runs.slice(0, 10);
-  if (!recent.length) html += '<div style="text-align:center;padding:20px;font-size:12px;color:var(--muted)">No recent runs found</div>';
-  recent.forEach(a => {
-    const mi = (a.distance / 1609.34).toFixed(2);
-    const pace = a.moving_time && a.distance > 0 ? fmtPace(a.moving_time / (a.distance / 1609.34)) : "—";
-    const d = new Date(a.start_date_local || a.start_date);
-    const ds = d.toLocaleDateString("en-US", { weekday:"short", month:"short", day:"numeric" });
-    const emoji = a.type === "TrailRun" ? "⛰️" : a.type === "Walk" ? "🚶" : "🏃";
-    html += `<div class="act-card"><div class="act-top"><div class="act-type">${emoji} ${a.name||a.type}</div><div class="act-date">${ds}</div></div><div class="act-stats"><div class="act-stat"><div class="act-stat-val">${mi} mi</div><div class="act-stat-label">Distance</div></div><div class="act-stat"><div class="act-stat-val">${pace}</div><div class="act-stat-label">Pace</div></div><div class="act-stat"><div class="act-stat-val">${fmtDur(a.moving_time)}</div><div class="act-stat-label">Time</div></div>${a.average_heartrate?`<div class="act-stat"><div class="act-hr">❤️ ${Math.round(a.average_heartrate)} bpm</div><div class="act-stat-label">Avg HR</div></div>`:""}</div></div>`;
+function filterMonth(m, btn) {
+  document.querySelectorAll('.mth-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.month-group').forEach(g=>{
+    g.classList.toggle('hidden', m!=='all' && +g.dataset.m !== m);
   });
-  document.getElementById("strava-activities").innerHTML = html;
 }
 
-function fmtDur(s) { if(!s)return"0:00"; const h=Math.floor(s/3600),m=Math.floor((s%3600)/60); return h>0?h+"h "+m+"m":m+"m"; }
-function fmtPace(spm) { const m=Math.floor(spm/60),s=Math.round(spm%60); return m+":"+(s<10?"0":"")+s+"/mi"; }
+function render() {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const months = [...new Set(weeks.map(w=>w.m))];
+  months.forEach(m => {
+    const mg = document.createElement('div');
+    mg.className = 'month-group'; mg.dataset.m = m;
+    mg.innerHTML = `<div class="month-hdr"><div class="month-line"></div><div class="month-lbl">${mNames[m]}</div><div class="month-line"></div></div>`;
+    weeks.filter(w=>w.m===m).forEach(w=>{
+      const done = w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length;
+      const all = done===w.wo.length;
+      const card = document.createElement('div');
+      card.className = 'week-card'+(w.cb?' cutback':'')+(all?' completed-week':'');
+      card.dataset.w = w.w;
+      card.innerHTML = `
+        <div class="week-hdr" onclick="this.closest('.week-card').classList.toggle('open')">
+          <div class="wk-num"><div class="wk-num-big">${w.w}</div><div class="wk-num-lbl">WK</div></div>
+          <div class="vdiv"></div>
+          <div class="wk-mi">${w.mi}</div>
+          <div class="vdiv"></div>
+          <span class="wk-prog${all?' done':''}">${done}/${w.wo.length}</span>
+          <div class="complete-ring">
+            <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="week-notes">${w.focus.replace(/\n/g,'<br>')}</div>
+        <div class="workouts-grid">
+          ${w.wo.map((wo,i)=>`
+            <div class="wo-tile ${tc(wo.t)}${S[`w${w.w}_${i}`]?' done':''}" onclick="tog('w${w.w}_${i}',this)">
+              <div class="tile-top">${wo.d}<div class="tile-chk"></div></div>
+              <div class="tile-bubble">${wo.e}</div>
+              <div class="tile-type">${wo.t}</div>
+              <div class="tile-detail">${wo.x.replace(/\n/g,'<br>')}</div>
+            </div>`).join('')}
+        </div>`;
+      mg.appendChild(card);
+    });
+    main.appendChild(mg);
+  });
+  stats();
+}
 
-// Init
-handleStravaCallback();
+function tog(k, tile) {
+  S[k] = !S[k];
+  tile.classList.toggle('done', S[k]);
+  save(S); stats();
+}
+
 render();
-// Auto-fetch Strava data if connected
-if (state.strava && state.strava.accessToken) { setTimeout(fetchStravaData, 500); }
 </script>
 </body>
 </html>
