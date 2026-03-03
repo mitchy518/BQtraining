@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BQ Training — Phase 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0a0a0a;--surface:#0f1a14;--surface2:#111f18;--surface3:#0c1510;--border:#1a2e22;--border2:#243d2c;--text:#e0e8e2;--muted:#3a5244;--dim:#1e2e24;--accent:#1db974;--accent-dim:rgba(29,185,116,0.10);--accent-glow:rgba(29,185,116,0.2);--gold:#c9a84c;--blue:#4a8fc9;--red:#c96060;--cross:#4aaac9;--purple:#9b72e8;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;}
+  nav{position:sticky;top:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);}
+  .logo-bq{font-size:18px;font-weight:700;color:var(--accent);}
+  .logo-text{font-size:18px;font-weight:500;color:var(--text);margin-left:6px;}
+  .nav-btns{display:flex;gap:8px;}
+  .nav-btn{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:7px 12px;font-size:12px;font-weight:500;color:var(--text);cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+  .ndot{width:7px;height:7px;border-radius:50%;background:#2a4a35;}
+  .today-banner{background:var(--surface3);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;}
+  .today-icon{font-size:22px;}
+  .today-title{font-size:13px;font-weight:600;color:var(--accent);}
+  .today-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+  .hero{background:radial-gradient(ellipse at 70% -20%,#0d2a1a 0%,#081410 55%,#0a0a0a 100%);padding:28px 16px 24px;border-bottom:1px solid var(--border);}
+  .phase-tag{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+  .phase-tag::before{content:'—';margin-right:2px;}
+  .hero-h1{font-size:52px;font-weight:700;line-height:1.0;letter-spacing:-1.5px;color:#fff;margin-bottom:2px;}
+  .hero-h1 .green{color:var(--accent);display:block;}
+  .hero-sub{font-size:13px;color:#4a6655;line-height:1.6;margin-bottom:22px;}
+  .phase-switcher{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+  .phase-btn{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:9px 14px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#4a6655;text-align:left;min-width:120px;}
+  .phase-btn-sub{display:block;font-size:10px;font-weight:400;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px;}
+  .phase-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+  .phase-btn.active .phase-btn-sub{color:rgba(29,185,116,0.6);}
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+  .stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 10px;position:relative;overflow:hidden;}
+  .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--accent);opacity:0.35;}
+  .stat-val{font-size:22px;font-weight:700;color:var(--text);line-height:1;margin-bottom:4px;}
+  .stat-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:7px;}
+  .progress-track{height:6px;background:var(--surface2);border-radius:3px;position:relative;overflow:visible;}
+  .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width 0.5s ease;position:relative;box-shadow:0 0 8px var(--accent-glow);min-width:12px;}
+  .progress-fill::after{content:'';position:absolute;right:-5px;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+  .legend{background:var(--bg);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;}
+  .legend::-webkit-scrollbar{display:none;}
+  .leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);white-space:nowrap;}
+  .leg-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .month-filter{padding:14px 16px 6px;display:flex;flex-wrap:wrap;gap:8px;background:var(--bg);}
+  .mth-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 13px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all 0.2s;}
+  .mth-btn.active{background:var(--accent-dim);border-color:var(--accent);color:var(--accent);}
+  main{background:var(--bg);padding:12px 16px 80px;}
+  .month-group{margin-bottom:24px;}
+  .month-group.hidden{display:none;}
+  .month-hdr{display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:0 2px;}
+  .month-line{flex:1;height:1px;background:var(--border);}
+  .month-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);white-space:nowrap;}
+  .week-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;}
+  .week-card.cutback{border-left:3px solid var(--blue);}
+  .week-card.completed-week{border-color:rgba(29,185,116,0.35);}
+  .week-hdr{display:flex;align-items:center;padding:14px 16px;cursor:pointer;gap:14px;user-select:none;}
+  .wk-num{min-width:36px;}
+  .wk-num-big{font-size:22px;font-weight:700;color:var(--accent);line-height:1;}
+  .wk-num-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:1px;}
+  .vdiv{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+  .wk-mi{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;}
+  .wk-prog{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);white-space:nowrap;}
+  .wk-prog.done{color:var(--accent);}
+  .complete-ring{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;}
+  .completed-week .complete-ring{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px var(--accent-glow);}
+  .complete-ring svg{display:none;}
+  .completed-week .complete-ring svg{display:block;}
+  .chevron{color:var(--muted);transition:transform 0.3s;flex-shrink:0;}
+  .week-card.open .chevron{transform:rotate(180deg);}
+  .week-notes{display:none;margin:0 16px 10px;padding:10px 14px;background:var(--accent-dim);border-left:2px solid var(--accent);border-radius:6px;font-size:12px;color:#3a8860;line-height:1.65;}
+  .week-card.open .week-notes{display:block;}
+  .workouts-grid{display:none;padding:0 16px 16px;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;}
+  .week-card.open .workouts-grid{display:grid;}
+  .wo-tile{background:var(--surface3);border:1px solid var(--border);border-radius:10px;padding:11px;cursor:pointer;}
+  .wo-tile.done{background:rgba(29,185,116,0.06);border-color:rgba(29,185,116,0.28);}
+  .tile-top{display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:9px;}
+  .tile-chk{width:13px;height:13px;border-radius:50%;border:1.5px solid var(--border2);transition:all 0.2s;position:relative;}
+  .wo-tile.done .tile-chk{background:var(--accent);border-color:var(--accent);}
+  .wo-tile.done .tile-chk::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#000;font-size:8px;line-height:1;}
+  .tile-bubble{width:30px;height:30px;border-radius:7px;border:1px solid;display:flex;align-items:center;justify-content:center;font-size:14px;margin-bottom:8px;}
+  .tile-type{font-size:11px;font-weight:600;margin-bottom:2px;}
+  .tile-detail{font-size:10px;color:var(--muted);line-height:1.5;}
+  .t-rest .tile-bubble{background:rgba(255,255,255,0.02);border-color:#1a1a1a;}.t-rest .tile-type{color:var(--dim);}
+  .t-easy .tile-bubble{background:rgba(29,185,116,0.07);border-color:rgba(29,185,116,0.18);}.t-easy .tile-type{color:var(--accent);}
+  .t-long .tile-bubble{background:rgba(74,143,201,0.07);border-color:rgba(74,143,201,0.18);}.t-long .tile-type{color:var(--blue);}
+  .t-tempo .tile-bubble{background:rgba(201,168,76,0.07);border-color:rgba(201,168,76,0.18);}.t-tempo .tile-type{color:var(--gold);}
+  .t-str .tile-bubble{background:rgba(201,96,96,0.07);border-color:rgba(201,96,96,0.18);}.t-str .tile-type{color:var(--red);}
+  .t-cross .tile-bubble{background:rgba(74,170,201,0.07);border-color:rgba(74,170,201,0.18);}.t-cross .tile-type{color:var(--cross);}
+  .t-interval .tile-bubble{background:rgba(155,114,232,0.07);border-color:rgba(155,114,232,0.18);}.t-interval .tile-type{color:var(--purple);}
+  .t-mp .tile-bubble{background:rgba(29,185,116,0.12);border-color:rgba(29,185,116,0.3);}.t-mp .tile-type{color:#25e88a;}
+  footer{background:var(--bg);text-align:center;padding:24px 16px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex;align-items:center"><span class="logo-bq">BQ</span><span class="logo-text">Training</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn"><div class="ndot"></div>Strava</button>
+    <button class="nav-btn">🔔 Alerts</button>
+  </div>
+</nav>
+
+<div class="today-banner">
+  <div class="today-icon">🏃</div>
+  <div>
+    <div class="today-title" id="today-title">Today's Workout</div>
+    <div class="today-sub" id="today-sub">Loading...</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="phase-tag">Phase 3 · Months 15–26 · Year 2</div>
+  <div class="hero-h1">Boston<span class="green">Qualifier</span></div>
+  <div class="hero-sub">Marathon Specific · 32→52 mpw · 5 days/week · First Marathon · Goal: Finish Strong</div>
+  <div class="phase-switcher">
+<button class="phase-btn" onclick="window.location.href='index.html'">Phase 1<span class="phase-btn-sub">Base Building</span></button>
+<button class="phase-btn" onclick="window.location.href='phase2.html'">Phase 2<span class="phase-btn-sub">Speed &amp; Half Marathon</span></button>
+<button class="phase-btn active">Phase 3<span class="phase-btn-sub">Marathon Specific</span></button>
+<button class="phase-btn" onclick="window.location.href='phase4.html'">Phase 4<span class="phase-btn-sub">BQ Attack</span></button>
+</div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" id="sv-done">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-wks">0</div><div class="stat-lbl">Weeks</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-pct">0%</div><div class="stat-lbl">Progress</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-rem">0</div><div class="stat-lbl">Remaining</div></div>
+  </div>
+  <div class="progress-meta"><span>Week 53</span><span id="pct-lbl">0% complete</span><span>Week 104</span></div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#222"></div>Rest</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1db974"></div>Easy Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a8fc9"></div>Long Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div>Tempo</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#9b72e8"></div>Intervals</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#25e88a"></div>Marathon Pace</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c96060"></div>Strength</div>
+</div>
+
+<div class="month-filter">
+  <button class="mth-btn active" onclick="fM('all',this)">All</button>
+  <button class="mth-btn" onclick="fM(15,this)">Mo 15</button>
+  <button class="mth-btn" onclick="fM(16,this)">Mo 16</button>
+  <button class="mth-btn" onclick="fM(17,this)">Mo 17</button>
+  <button class="mth-btn" onclick="fM(18,this)">Mo 18</button>
+  <button class="mth-btn" onclick="fM(19,this)">Mo 19</button>
+  <button class="mth-btn" onclick="fM(20,this)">Mo 20</button>
+  <button class="mth-btn" onclick="fM(21,this)">Mo 21</button>
+  <button class="mth-btn" onclick="fM(22,this)">Mo 22</button>
+  <button class="mth-btn" onclick="fM(23,this)">Mo 23</button>
+  <button class="mth-btn" onclick="fM(24,this)">Mo 24</button>
+  <button class="mth-btn" onclick="fM(25,this)">Mo 25</button>
+  <button class="mth-btn" onclick="fM(26,this)">Mo 26</button>
+</div>
+
+<main id="main"></main>
+<footer>Tap any tile to mark complete · Phase 3 · Weeks 53–104 · Year 2</footer>
+
+<script>
+const weeks=[
+  // MONTH 15 — Year 2 rebase (post HM recovery)
+  {w:53,m:15,mi:'~32 mi',cb:false,focus:'MONTH 15 — YEAR 2 REBASE · Post-HM recovery complete. Rebuild with 5-day schedule. Relaxed effort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n4 mi tempo\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:54,m:15,mi:'~34 mi',cb:false,focus:'AEROBIC REBUILD · Volume climbing back. Long run building toward 20-mi peak.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'7 mi total:\n1.5 warm-up\n5×800m @ 10K effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:55,m:15,mi:'~36 mi',cb:false,focus:'BUILDING CONFIDENCE · 36 mpw feels comfortable now. Aerobic engine much stronger than Year 1 start.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n1.5 warm-up\n5 mi tempo\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'15 mi easy'}]},
+  {w:56,m:15,mi:'~27 mi',cb:true,focus:'⬇ CUTBACK WEEK · Easy recovery. Prepare body for steady Year 2 volume build.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'11 mi easy'}]},
+
+  // MONTH 16 — Interval block
+  {w:57,m:16,mi:'~38 mi',cb:false,focus:'MONTH 16 — INTERVAL BLOCK · 1-mile repeats at 10K effort. Aerobic power building rapidly.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n5×1 mile @ 10K effort\n(90 sec jog rest)\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'16 mi easy'}]},
+  {w:58,m:16,mi:'~40 mi',cb:false,focus:'TEMPO + LONG SURGE · Add marathon-pace miles at end of long run for first time.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'9 mi total:\n2 warm-up\n5 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'17 mi:\n14 easy + 3 at marathon pace'}]},
+  {w:59,m:16,mi:'~42 mi',cb:false,focus:'40+ MPW MILESTONE · Consistent 40+ mpw is rare. You\'re becoming a serious runner.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n6×1 mile @ 10K effort\n(90 sec jog rest)\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi easy'}]},
+  {w:60,m:16,mi:'~32 mi',cb:true,focus:'⬇ CUTBACK WEEK · Body integrating high-volume aerobic work. Sleep and nutrition priority.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+
+  // MONTH 17-18 — Marathon-specific work
+  {w:61,m:17,mi:'~43 mi',cb:false,focus:'MONTH 17 — MARATHON SPECIFICS · Marathon-pace long runs. Learning how goal pace feels.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'8 mi total:\n2 warm-up\n4 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi:\n14 easy + 4 at marathon pace'}]},
+  {w:62,m:17,mi:'~44 mi',cb:false,focus:'MP PROGRESSION · Extend marathon-pace segment. Fueling practice every 45 minutes.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n5×1 mile @ 10K effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'19 mi:\n13 easy + 6 at marathon pace'}]},
+  {w:63,m:17,mi:'~45 mi',cb:false,focus:'LONG RUN 20 MILES · First 20-miler! Major psychological and physiological milestone.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'9 mi total:\n2 warm-up\n5 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'20 mi easy 🎉\nFuel every 45 min'}]},
+  {w:64,m:17,mi:'~34 mi',cb:true,focus:'⬇ CUTBACK · After first 20-miler, body needs full adaptation. Do not rush back.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:65,m:18,mi:'~46 mi',cb:false,focus:'MONTH 18 — PEAK BUILD · Second 20-miler approaching. Marathon-pace work getting comfortable.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'9 mi total:\n2 warm-up\n5 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'20 mi:\n14 easy + 6 at marathon pace'}]},
+  {w:66,m:18,mi:'~47 mi',cb:false,focus:'CONFIDENCE LONG RUN · 21 miles. Mental toughness workout. Embrace the discomfort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n4×2 mi @ HM effort\n(2 min rest)\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'21 mi easy'}]},
+  {w:67,m:18,mi:'~48 mi',cb:false,focus:'PEAK VOLUME WEEK · 48 mpw. You now have more miles in your legs than most runners ever accumulate.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'10 mi total:\n2 warm-up\n6 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'20 mi:\n14 easy + 6 at marathon pace'}]},
+  {w:68,m:18,mi:'~37 mi',cb:true,focus:'⬇ CUTBACK · Pre-taper cutback. Last big down week before race. Honor the process.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'15 mi easy'}]},
+
+  // MONTH 19-20 — Marathon taper + race
+  {w:69,m:19,mi:'~46 mi',cb:false,focus:'MONTH 19 — TAPER BEGINS · Volume reduces 10% per week. Keep intensity. Trust training.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'9 mi total:\n2 warm-up\n5 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi easy'}]},
+  {w:70,m:19,mi:'~40 mi',cb:false,focus:'TAPER WEEK 2 · Volume drops again. Legs feeling springy. Avoid extra miles temptation.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n2 warm-up\n4 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'15 mi easy'}]},
+  {w:71,m:19,mi:'~32 mi',cb:false,focus:'TAPER WEEK 3 · Sharp reduction. Short quality session. Body loading glycogen stores.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'7 mi total:\n1.5 warm-up\n4×800m @ 5K effort\n(final sharpener)\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:72,m:19,mi:'~22 mi',cb:false,focus:'RACE WEEK · Final prep. Carb load Thu–Sat. Visualize your race. You are ready.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy\n+ 4×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest — final rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout\n+ 4 strides\nLay out gear'},{d:'Sun',e:'🏁',t:'MP Run',x:'MARATHON #1!\nGoal: finish strong\nFuel every 4 miles\nStart conservative'}]},
+
+  // MONTH 20-21 — Recovery + rebase
+  {w:73,m:20,mi:'~18 mi',cb:false,focus:'MONTH 20 — MARATHON RECOVERY · Celebrate! First marathon complete. Easy walking and very short runs only.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Complete rest\nElevate legs'},{d:'Tue',e:'—',t:'Rest',x:'Rest or 20-min walk'},{d:'Wed',e:'💪',t:'Strength',x:'Gentle mobility only\nNo loading'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi very easy\nStop if any pain'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'8 mi easy\nHR <65% max'}]},
+  {w:74,m:20,mi:'~22 mi',cb:false,focus:'SOFT RETURN · Continue easy running. No quality for 3 weeks post-marathon. Body repairing.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:75,m:20,mi:'~28 mi',cb:false,focus:'REBUILDING MILEAGE · Tempo reintroduced gently. Note how fitness has been retained.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1.5 warm-up\n3 mi moderate effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:76,m:20,mi:'~20 mi',cb:true,focus:'⬇ CUTBACK · Full recovery week. Marathon fatigue lingers up to 4–6 weeks. Be patient.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+
+  // MONTH 21-22 — Second marathon build begins
+  {w:77,m:21,mi:'~36 mi',cb:false,focus:'MONTH 21 — SECOND MARATHON BUILD · Lessons from Marathon #1 inform this cycle. More efficient.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'8 mi total:\n1.5 warm-up\n5×1 mile @ 10K effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:78,m:21,mi:'~40 mi',cb:false,focus:'QUALITY RETURNS · Fitness coming back fast. Previous training creates aerobic memory.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'9 mi total:\n2 warm-up\n5 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'16 mi easy'}]},
+  {w:79,m:21,mi:'~44 mi',cb:false,focus:'LONG RUN FOCUS · 18 miles with marathon-pace finish. Running at goal pace feels more natural now.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'9 mi total:\n2 warm-up\n5 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi:\n12 easy + 6 at marathon pace'}]},
+  {w:80,m:21,mi:'~33 mi',cb:true,focus:'⬇ CUTBACK WEEK · Midway through Phase 3. Assess fatigue. Adjust if needed.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:81,m:22,mi:'~46 mi',cb:false,focus:'MONTH 22 — PEAK BUILD #2 · Second peak block. Goal pace internalized. 20-mile long runs.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'10 mi total:\n1.5 warm-up\n6×1 mile @ 10K effort\n(90 sec rest)\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'20 mi:\n14 easy + 6 at marathon pace'}]},
+  {w:82,m:22,mi:'~48 mi',cb:false,focus:'HIGH VOLUME SUSTAINED · 48 mpw on 5 days. Fitness level approaching what\'s needed for BQ.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'10 mi total:\n2 warm-up\n6 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'20 mi easy'}]},
+  {w:83,m:22,mi:'~50 mi',cb:false,focus:'50 MPW MILESTONE 🏆 · Half of BQ athletes train at this volume. You\'ve arrived.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'8 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'10 mi total:\n2 warm-up\n6 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'21 mi:\n14 easy + 7 at marathon pace'}]},
+  {w:84,m:22,mi:'~38 mi',cb:true,focus:'⬇ CUTBACK · Pre-race taper begins. Reduce volume, maintain some intensity.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n4 mi tempo\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'16 mi easy'}]},
+
+  // MONTH 23-24 — HM tune-up + Marathon #2 taper
+  {w:85,m:23,mi:'~44 mi',cb:false,focus:'MONTH 23 — HM TUNE-UP · Half marathon race as final fitness test before Marathon #2.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n5×1 mile @ 10K effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi:\n12 easy + 6 at marathon pace'}]},
+  {w:86,m:23,mi:'~36 mi',cb:false,focus:'HM TAPER WEEK · Reduce volume for tune-up half. Keep strides. Confirm marathon pace feel.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n4 mi at HM goal pace\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi shakeout + strides'},{d:'Sun',e:'🏁',t:'MP Run',x:'HALF MARATHON tune-up\nGoal: sub-1:52\nConfirm marathon fitness'}]},
+  {w:87,m:23,mi:'~42 mi',cb:false,focus:'POST-HM RETURN · Use HM result to confirm marathon goal pace. Adjust if needed.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'9 mi total:\n2 warm-up\n5 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi:\n12 easy + 6 at marathon pace'}]},
+  {w:88,m:23,mi:'~32 mi',cb:true,focus:'⬇ CUTBACK · Deep rest before Marathon #2 taper block. Legs must be fresh.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:89,m:24,mi:'~44 mi',cb:false,focus:'MONTH 24 — FINAL MARATHON TAPER · 3-week taper to Marathon #2. Target: sub-3:55.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'9 mi total:\n2 warm-up\n5 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi easy'}]},
+  {w:90,m:24,mi:'~36 mi',cb:false,focus:'TAPER WEEK 2 · Volume drops. Nervous energy is good — it means you\'re ready.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n4 mi tempo\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:91,m:24,mi:'~26 mi',cb:false,focus:'RACE WEEK — MARATHON #2 · Carb load Thu–Sat. Visualize miles 18–26. Sub-3:55 awaits.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy + strides'},{d:'Fri',e:'—',t:'Rest',x:'Full rest\nLay out gear tonight'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout\n+ 4×20-sec strides'},{d:'Sun',e:'🏁',t:'MP Run',x:'MARATHON #2!\nTarget: sub-3:55\nStart at goal pace\nFuel every 30 min'}]},
+
+  // MONTH 25-26 — Recovery + Phase 3 complete
+  {w:92,m:25,mi:'~18 mi',cb:false,focus:'MONTH 25 — MARATHON #2 RECOVERY · Rest and celebrate. Reflect on execution vs. plan.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Complete rest'},{d:'Tue',e:'—',t:'Rest',x:'Rest or walk'},{d:'Wed',e:'💪',t:'Strength',x:'Gentle mobility only'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi very easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'8 mi easy\nHR <65%'}]},
+  {w:93,m:25,mi:'~22 mi',cb:false,focus:'EASY WEEKS ONLY · No quality for 3 weeks post-marathon. Enjoy running without purpose.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:94,m:25,mi:'~28 mi',cb:false,focus:'QUALITY RETURNS · Aerobic fitness coming back quickly. Base from 2 years of training is immense.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1.5 warm-up\n3 mi moderate\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:95,m:25,mi:'~20 mi',cb:true,focus:'⬇ CUTBACK · Last easy week before Phase 3 final block. You\'re 2 years in. Be proud.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+  {w:96,m:26,mi:'~34 mi',cb:false,focus:'MONTH 26 — PHASE 3 COMPLETE · Final month of Phase 3. Begin training like a BQ runner.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🟢',t:'MP Run',x:'8 mi total:\n2 warm-up\n4 mi at marathon pace\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:97,m:26,mi:'~38 mi',cb:false,focus:'BQ PACE CONFIDENCE · Marathon pace should feel manageable at this point. Note how far you\'ve come.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Thu',e:'🟣',t:'Intervals',x:'9 mi total:\n1.5 warm-up\n5×1 mile @ 10K effort\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'16 mi easy'}]},
+  {w:98,m:26,mi:'~42 mi',cb:false,focus:'STRONG FINISH · End Phase 3 on a high. 18-mile long run with marathon-pace miles.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'7 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Thu',e:'⚡',t:'Tempo',x:'9 mi total:\n2 warm-up\n5 mi tempo\n2 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'18 mi:\n12 easy + 6 at marathon pace'}]},
+  {w:99,m:26,mi:'~30 mi',cb:true,focus:'⬇ PHASE 3 COMPLETE! 🎉 · 2 years done. 2 marathons finished. Phase 4: BQ Attack begins next.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Thu',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy\nReflect on 2 years\nof progress 🏆'}]},
+];
+
+const mNames={15:'Month 15 — Year 2 Rebase',16:'Month 16 — Interval Block',17:'Month 17 — First 20-Miler',18:'Month 18 — Peak Volume',19:'Month 19 — Marathon #1 Taper',20:'Month 20 — Marathon Recovery',21:'Month 21 — Second Build',22:'Month 22 — Peak Volume #2',23:'Month 23 — HM Tune-Up',24:'Month 24 — Marathon #2 Taper',25:'Month 25 — Marathon Recovery',26:'Month 26 — Phase 3 Complete'};
+
+function tc(t){const s=t.toLowerCase();if(s==='rest')return 't-rest';if(s.includes('easy'))return 't-easy';if(s.includes('long'))return 't-long';if(s.includes('interval'))return 't-interval';if(s.includes('mp run')||s.includes('marathon pace'))return 't-mp';if(s.includes('tempo')||s.includes('race'))return 't-tempo';if(s.includes('strength'))return 't-str';if(s.includes('cross'))return 't-cross';return 't-rest';}
+function load(){try{return JSON.parse(localStorage.getItem('bq_p3')||'{}');}catch(e){return{};}}
+function save(s){try{localStorage.setItem('bq_p3',JSON.stringify(s));}catch(e){}}
+let S=load();
+const total=weeks.reduce((a,w)=>a+w.wo.length,0);
+function getDayWorkout(){const m={0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};const today=m[new Date().getDay()];for(const w of weeks){if(w.wo.every((_,i)=>S[`w${w.w}_${i}`]))continue;const wo=w.wo.find(x=>x.d===today&&x.t!=='Rest');if(wo)return{week:w.w,wo};}return null;}
+function stats(){
+  const done=Object.values(S).filter(Boolean).length,wksDone=weeks.filter(w=>w.wo.every((_,i)=>S[`w${w.w}_${i}`])).length,pct=Math.round(done/total*100);
+  document.getElementById('sv-done').textContent=done;document.getElementById('sv-wks').textContent=wksDone;document.getElementById('sv-pct').textContent=pct+'%';document.getElementById('sv-rem').textContent=total-done;
+  document.getElementById('prog-fill').style.width=Math.max(pct,0.5)+'%';document.getElementById('pct-lbl').textContent=pct+'% complete';
+  const tw=getDayWorkout();document.getElementById('today-title').textContent=tw?`Today's Workout — Week ${tw.week}`:'Rest Day';document.getElementById('today-sub').textContent=tw?`${tw.wo.t}: ${tw.wo.x.split('\n')[0]}`:'No workout today — recover well!';
+  weeks.forEach(w=>{const card=document.querySelector(`[data-w="${w.w}"]`);if(!card)return;const d=w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length;card.querySelector('.wk-prog').textContent=`${d}/${w.wo.length}`;card.querySelector('.wk-prog').className='wk-prog'+(d===w.wo.length?' done':'');card.classList.toggle('completed-week',d===w.wo.length);});
+}
+function fM(m,btn){document.querySelectorAll('.mth-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.month-group').forEach(g=>{g.classList.toggle('hidden',m!=='all'&&+g.dataset.m!==m);});}
+function render(){
+  const main=document.getElementById('main');main.innerHTML='';
+  [...new Set(weeks.map(w=>w.m))].forEach(m=>{
+    const mg=document.createElement('div');mg.className='month-group';mg.dataset.m=m;
+    mg.innerHTML=`<div class="month-hdr"><div class="month-line"></div><div class="month-lbl">${mNames[m]}</div><div class="month-line"></div></div>`;
+    weeks.filter(w=>w.m===m).forEach(w=>{
+      const done=w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length,all=done===w.wo.length;
+      const card=document.createElement('div');card.className='week-card'+(w.cb?' cutback':'')+(all?' completed-week':'');card.dataset.w=w.w;
+      card.innerHTML=`<div class="week-hdr" onclick="this.closest('.week-card').classList.toggle('open')"><div class="wk-num"><div class="wk-num-big">${w.w}</div><div class="wk-num-lbl">WK</div></div><div class="vdiv"></div><div class="wk-mi">${w.mi}</div><div class="vdiv"></div><span class="wk-prog${all?' done':''}">${done}/${w.wo.length}</span><div class="complete-ring"><svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div><div class="week-notes">${w.focus.replace(/\n/g,'<br>')}</div><div class="workouts-grid">${w.wo.map((wo,i)=>`<div class="wo-tile ${tc(wo.t)}${S[`w${w.w}_${i}`]?' done':''}" onclick="tog('w${w.w}_${i}',this)"><div class="tile-top">${wo.d}<div class="tile-chk"></div></div><div class="tile-bubble">${wo.e}</div><div class="tile-type">${wo.t}</div><div class="tile-detail">${wo.x.replace(/\n/g,'<br>')}</div></div>`).join('')}</div>`;
+      mg.appendChild(card);
+    });main.appendChild(mg);
+  });stats();
+}
+function tog(k,tile){S[k]=!S[k];tile.classList.toggle('done',S[k]);save(S);stats();}
+render();
+</script>
+</body>
+</html>

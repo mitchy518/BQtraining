@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BQ Training</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #0f1a14;
+    --surface2: #111f18;
+    --surface3: #0c1510;
+    --border: #1a2e22;
+    --border2: #243d2c;
+    --text: #e0e8e2;
+    --muted: #3a5244;
+    --dim: #1e2e24;
+    --accent: #1db974;
+    --accent-dim: rgba(29,185,116,0.10);
+    --accent-glow: rgba(29,185,116,0.2);
+    --gold: #c9a84c;
+    --blue: #4a8fc9;
+    --red: #c96060;
+    --cross: #4aaac9;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { background:var(--bg); color:var(--text); font-family:'Space Grotesk',sans-serif; min-height:100vh; }
+
+  /* NAV */
+  nav {
+    position:sticky; top:0; z-index:100;
+    background:var(--bg);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 16px;
+    border-bottom:1px solid var(--border);
+  }
+  .nav-logo { display:flex; align-items:center; gap:6px; }
+  .logo-bq { font-size:18px; font-weight:700; color:var(--accent); letter-spacing:-0.5px; }
+  .logo-text { font-size:18px; font-weight:500; color:var(--text); }
+  .nav-btns { display:flex; gap:8px; }
+  .nav-btn {
+    display:flex; align-items:center; gap:5px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:20px; padding:7px 12px;
+    font-size:12px; font-weight:500; color:var(--text);
+    cursor:pointer; font-family:'Space Grotesk',sans-serif;
+    transition:border-color 0.2s;
+  }
+  .nav-btn .ndot { width:7px; height:7px; border-radius:50%; background:#2a4a35; }
+
+  /* TODAY BANNER */
+  .today-banner {
+    background:var(--surface3);
+    border-bottom:1px solid var(--border);
+    padding:12px 16px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .today-icon { font-size:22px; line-height:1; }
+  .today-title { font-size:13px; font-weight:600; color:var(--accent); }
+  .today-sub { font-size:12px; color:var(--muted); margin-top:1px; }
+
+  /* HERO — only visible at top */
+  .hero {
+    background: radial-gradient(ellipse at 70% -20%, #0d2a1a 0%, #081410 55%, #0a0a0a 100%);
+    padding:28px 16px 24px;
+    border-bottom:1px solid var(--border);
+  }
+  .phase-tag {
+    display:flex; align-items:center; gap:8px;
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    letter-spacing:2px; text-transform:uppercase; color:var(--accent);
+    margin-bottom:14px;
+  }
+  .phase-tag::before { content:'—'; margin-right:2px; }
+  .hero-h1 { font-size:52px; font-weight:700; line-height:1.0; letter-spacing:-1.5px; color:#fff; margin-bottom:2px; }
+  .hero-h1 .green { color:var(--accent); display:block; }
+  .hero-sub { font-size:13px; color:#4a6655; line-height:1.6; margin-bottom:22px; }
+
+  /* PHASE PILLS */
+  .phase-switcher { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+  .phase-btn {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:9px 14px; cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:600;
+    color:#4a6655; text-align:left; min-width:120px; transition:all 0.2s;
+  }
+  .phase-btn-sub { display:block; font-size:10px; font-weight:400; color:var(--muted); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+  .phase-btn.active { background:var(--accent-dim); border-color:var(--accent); color:var(--accent); }
+  .phase-btn.active .phase-btn-sub { color:rgba(29,185,116,0.6); }
+
+  /* STATS */
+  .stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:18px; }
+  .stat-card {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 10px; position:relative; overflow:hidden;
+  }
+  .stat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--accent); opacity:0.35; }
+  .stat-val { font-size:22px; font-weight:700; color:var(--text); line-height:1; margin-bottom:4px; }
+  .stat-lbl { font-family:'JetBrains Mono',monospace; font-size:8px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+
+  /* PROGRESS */
+  .progress-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:7px; }
+  .progress-track { height:6px; background:var(--surface2); border-radius:3px; position:relative; overflow:visible; }
+  .progress-fill {
+    height:100%; background:var(--accent); border-radius:3px;
+    transition:width 0.5s ease; position:relative;
+    box-shadow:0 0 8px var(--accent-glow); min-width:12px;
+  }
+  .progress-fill::after {
+    content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%);
+    width:12px; height:12px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 10px var(--accent);
+  }
+
+  /* LEGEND */
+  .legend {
+    background:var(--bg); border-bottom:1px solid var(--border);
+    padding:10px 16px; display:flex; gap:14px; overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .legend::-webkit-scrollbar { display:none; }
+  .leg-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .leg-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+  /* MONTH FILTER */
+  .month-filter { padding:14px 16px 6px; display:flex; flex-wrap:wrap; gap:8px; background:var(--bg); }
+  .mth-btn {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; padding:7px 13px;
+    font-size:12px; font-weight:500; color:var(--muted);
+    cursor:pointer; font-family:'Space Grotesk',sans-serif; transition:all 0.2s;
+  }
+  .mth-btn.active { background:var(--accent-dim); border-color:var(--accent); color:var(--accent); }
+
+  /* MAIN */
+  main { background:var(--bg); padding:12px 16px 80px; }
+
+  /* MONTH GROUP */
+  .month-group { margin-bottom:24px; }
+  .month-group.hidden { display:none; }
+  .month-hdr {
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:10px; padding:0 2px;
+  }
+  .month-line { flex:1; height:1px; background:var(--border); }
+  .month-lbl {
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    text-transform:uppercase; letter-spacing:2px; color:var(--muted);
+    white-space:nowrap;
+  }
+
+  /* WEEK CARD */
+  .week-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:12px; margin-bottom:8px; overflow:hidden;
+    transition:border-color 0.2s;
+  }
+  .week-card.cutback { border-left:3px solid var(--blue); }
+  .week-card.completed-week { border-color:rgba(29,185,116,0.35); }
+
+  .week-hdr {
+    display:flex; align-items:center; padding:14px 16px;
+    cursor:pointer; gap:14px; user-select:none;
+  }
+  .week-hdr:active { background:rgba(255,255,255,0.02); }
+
+  .wk-num { min-width:36px; }
+  .wk-num-big { font-size:22px; font-weight:700; color:var(--accent); line-height:1; }
+  .wk-num-lbl { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:1px; }
+
+  .vdiv { width:1px; height:28px; background:var(--border); flex-shrink:0; }
+
+  .wk-mi { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .wk-prog { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap; }
+  .wk-prog.done { color:var(--accent); }
+
+  .complete-ring {
+    width:22px; height:22px; border-radius:50%;
+    border:1.5px solid var(--border2);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all 0.2s;
+  }
+  .completed-week .complete-ring { background:var(--accent); border-color:var(--accent); box-shadow:0 0 8px var(--accent-glow); }
+  .complete-ring svg { display:none; }
+  .completed-week .complete-ring svg { display:block; }
+
+  .chevron { color:var(--muted); transition:transform 0.3s; flex-shrink:0; }
+  .week-card.open .chevron { transform:rotate(180deg); }
+
+  /* EXPANDED */
+  .week-notes {
+    display:none; margin:0 16px 10px;
+    padding:10px 14px; background:var(--accent-dim);
+    border-left:2px solid var(--accent); border-radius:6px;
+    font-size:12px; color:#3a8860; line-height:1.65;
+  }
+  .week-card.open .week-notes { display:block; }
+
+  .workouts-grid {
+    display:none; padding:0 16px 16px;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:8px;
+  }
+  .week-card.open .workouts-grid { display:grid; }
+
+  /* WORKOUT TILE */
+  .wo-tile {
+    background:var(--surface3); border:1px solid var(--border);
+    border-radius:10px; padding:11px; cursor:pointer; transition:border-color 0.15s;
+  }
+  .wo-tile:active { opacity:0.85; }
+  .wo-tile.done { background:rgba(29,185,116,0.06); border-color:rgba(29,185,116,0.28); }
+
+  .tile-top {
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:'JetBrains Mono',monospace; font-size:9px;
+    text-transform:uppercase; letter-spacing:1px; color:var(--muted);
+    margin-bottom:9px;
+  }
+  .tile-chk {
+    width:13px; height:13px; border-radius:50%;
+    border:1.5px solid var(--border2); transition:all 0.2s; position:relative;
+  }
+  .wo-tile.done .tile-chk { background:var(--accent); border-color:var(--accent); box-shadow:0 0 5px var(--accent-glow); }
+  .wo-tile.done .tile-chk::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#000; font-size:8px; line-height:1; }
+
+  .tile-bubble {
+    width:30px; height:30px; border-radius:7px; border:1px solid;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; margin-bottom:8px;
+  }
+  .tile-type { font-size:11px; font-weight:600; margin-bottom:2px; }
+  .tile-detail { font-size:10px; color:var(--muted); line-height:1.5; }
+
+  .t-rest   .tile-bubble { background:rgba(255,255,255,0.02); border-color:#1a1a1a; }
+  .t-rest   .tile-type   { color:var(--dim); }
+  .t-easy   .tile-bubble { background:rgba(29,185,116,0.07); border-color:rgba(29,185,116,0.18); }
+  .t-easy   .tile-type   { color:var(--accent); }
+  .t-long   .tile-bubble { background:rgba(74,143,201,0.07); border-color:rgba(74,143,201,0.18); }
+  .t-long   .tile-type   { color:var(--blue); }
+  .t-tempo  .tile-bubble { background:rgba(201,168,76,0.07); border-color:rgba(201,168,76,0.18); }
+  .t-tempo  .tile-type   { color:var(--gold); }
+  .t-str    .tile-bubble { background:rgba(201,96,96,0.07); border-color:rgba(201,96,96,0.18); }
+  .t-str    .tile-type   { color:var(--red); }
+  .t-cross  .tile-bubble { background:rgba(74,170,201,0.07); border-color:rgba(74,170,201,0.18); }
+  .t-cross  .tile-type   { color:var(--cross); }
+
+  footer {
+    background:var(--bg); text-align:center; padding:24px 16px;
+    color:var(--dim); font-family:'JetBrains Mono',monospace;
+    font-size:10px; letter-spacing:1px; border-top:1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><span class="logo-bq">BQ</span><span class="logo-text">Training</span></div>
+  <div class="nav-btns">
+    <button class="nav-btn"><div class="ndot"></div>Strava</button>
+    <button class="nav-btn">🔔 Alerts</button>
+  </div>
+</nav>
+
+<div class="today-banner">
+  <div class="today-icon">🏃</div>
+  <div>
+    <div class="today-title" id="today-title">Today's Workout — Week 1</div>
+    <div class="today-sub" id="today-sub">Easy Run: 3 mi easy</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="phase-tag">Phase 1 · Months 1–6</div>
+  <div class="hero-h1">Boston<span class="green">Qualifier</span></div>
+  <div class="hero-sub">33-Year-Old Female · Rebuild aerobic base from 10–12 mpw to 28–30 mpw · Goal: 28–30 mpw</div>
+
+  <div class="phase-switcher">
+<button class="phase-btn active">Phase 1<span class="phase-btn-sub">Base Building</span></button>
+<button class="phase-btn" onclick="window.location.href='phase2.html'">Phase 2<span class="phase-btn-sub">Speed &amp; Half Marathon</span></button>
+<button class="phase-btn" onclick="window.location.href='phase3.html'">Phase 3<span class="phase-btn-sub">Marathon Specific</span></button>
+<button class="phase-btn" onclick="window.location.href='phase4.html'">Phase 4<span class="phase-btn-sub">BQ Attack</span></button>
+</div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-val" id="sv-done">0</div><div class="stat-lbl">Done</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-wks">0</div><div class="stat-lbl">Weeks</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-pct">0%</div><div class="stat-lbl">Progress</div></div>
+    <div class="stat-card"><div class="stat-val" id="sv-rem">168</div><div class="stat-lbl">Remaining</div></div>
+  </div>
+
+  <div class="progress-meta">
+    <span>Week 1</span><span id="pct-lbl">0% complete</span><span>Week 24</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#222"></div>Rest</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1db974"></div>Easy Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4a8fc9"></div>Long Run</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c9a84c"></div>Tempo / Intervals</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#4aaac9"></div>Cross-Train</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#c96060"></div>Strength</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1db974"></div>Race</div>
+</div>
+
+<div class="month-filter" id="mth-filter">
+  <button class="mth-btn active" onclick="filterMonth('all',this)">All Months</button>
+  <button class="mth-btn" onclick="filterMonth(1,this)">Month 1</button>
+  <button class="mth-btn" onclick="filterMonth(2,this)">Month 2</button>
+  <button class="mth-btn" onclick="filterMonth(3,this)">Month 3</button>
+  <button class="mth-btn" onclick="filterMonth(4,this)">Month 4</button>
+  <button class="mth-btn" onclick="filterMonth(5,this)">Month 5</button>
+  <button class="mth-btn" onclick="filterMonth(6,this)">Month 6</button>
+</div>
+
+<main id="main"></main>
+<footer>Tap any tile to mark complete · Progress saves automatically · Phase 1 · 24 weeks</footer>
+
+<script>
+const weeks = [
+  {w:1,m:1,mi:'~12 mi',cb:false,focus:'REBUILD · All runs fully conversational. Re-establish habit. Monitor injury site.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy\nConversational pace'},{d:'Wed',e:'💪',t:'Strength',x:'30 min lower body\nGlutes, hips, squats'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy\n+ 4×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest or light walk'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4 mi easy\n11:30–12:30/mi'}]},
+  {w:2,m:1,mi:'~12 mi',cb:false,focus:'CONSISTENCY · Same easy effort both weeks. Focus on running without discomfort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min: hip bridges,\nlunges, calf raises'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy\n+ 4×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4.5 mi easy'}]},
+  {w:3,m:1,mi:'~13 mi',cb:false,focus:'ADD VOLUME GENTLY · First week above starting mileage. Add Friday shakeout.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min: deadlifts,\nstep-ups, monster walks'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Fri',e:'🏃',t:'Easy Run',x:'2 mi shakeout'},{d:'Sat',e:'🎯',t:'Long Run',x:'5 mi easy'},{d:'Sun',e:'🔄',t:'Cross-Train',x:'25 min swim or\nelliptical'}]},
+  {w:4,m:1,mi:'~10 mi',cb:true,focus:'⬇ CUTBACK WEEK · Reduce to ~80%. Body absorbs training gains. Do not skip!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance\n(lighter load)'},{d:'Thu',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'4 mi easy'}]},
+  {w:5,m:2,mi:'~14 mi',cb:false,focus:'STEADY BUILD · Running should feel comfortable and controlled.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min: planks,\nRDLs, weighted step-ups'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout'},{d:'Sun',e:'🎯',t:'Long Run',x:'5.5 mi easy'}]},
+  {w:6,m:2,mi:'~15 mi',cb:false,focus:'AEROBIC BASE BUILDING · HR <75% max on easy runs. Full conversation test.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'35 min full body\nSingle-leg stability'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'6 mi easy'}]},
+  {w:7,m:2,mi:'~16 mi',cb:false,focus:'CONSISTENCY COMPOUNDS · Built 12→16 mpw. Resist going faster.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min progressive\nloading'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'7 mi easy'}]},
+  {w:8,m:2,mi:'~12 mi',cb:true,focus:'⬇ CUTBACK WEEK · Lighter load. Extra sleep. Adaptation happens now.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'5 mi easy'}]},
+  {w:9,m:3,mi:'~18 mi',cb:false,focus:'MILESTONE · Approaching pre-injury mileage. Monitor body closely. Foam roll daily.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min: balance &\nstability focus'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy + strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'8 mi easy'}]},
+  {w:10,m:3,mi:'~20 mi',cb:false,focus:'MATCHING PRE-INJURY PEAK · Running more than before injury. Book a massage.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'40 min full body\nProgress loading'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4.5 mi easy\n+ 6×20-sec strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+  {w:11,m:3,mi:'~22 mi',cb:false,focus:'FIRST QUALITY WORKOUT · Brief moderate effort. Keep it controlled.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min: increase\nweights on key lifts'},{d:'Thu',e:'⚡',t:'Tempo',x:'5 mi total:\n1.5 warm-up\n2 mi moderate\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:12,m:3,mi:'~16 mi',cb:true,focus:'⬇ CUTBACK — 3 MONTHS DONE! · Get a gait analysis. Reflect on progress.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'7 mi easy'}]},
+  {w:13,m:4,mi:'~24 mi',cb:false,focus:'EXCEED PRIOR PEAK · Two workout types now: easy & moderate.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min: Bulgarian\nsplit squats, hip work'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1.5 warm-up\n3 mi moderate\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'11 mi easy'}]},
+  {w:14,m:4,mi:'~25 mi',cb:false,focus:'BACK TO PRIOR PEAK MILEAGE · More fitness underneath than ever before.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body\nGlute med, hip flexors'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1 warm-up\n4 mi moderate\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'11.5 mi easy'}]},
+  {w:15,m:4,mi:'~26 mi',cb:false,focus:'EXCEEDING PRIOR PEAK · First time above 25 mpw post-injury. Celebrate!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min power focus\nJump squats, bounding'},{d:'Thu',e:'⚡',t:'Tempo',x:'6 mi total:\n1 warm-up\n4 mi moderate\n+ strides'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:16,m:4,mi:'~20 mi',cb:true,focus:'⬇ CUTBACK — 4 MONTHS DONE · Sign up for a local 5K in Month 5 or 6!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy'}]},
+  {w:17,m:5,mi:'~27 mi',cb:false,focus:'FIRST TRUE TEMPO · 10K race effort. Short phrases only. Comfortably hard.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body\nRace-prep leg strength'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1.5 warm-up\n3 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3.5 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'12 mi easy'}]},
+  {w:18,m:5,mi:'~28 mi',cb:false,focus:'TEMPO PROGRESSION · Extend tempo by 1 mile. Even, consistent effort.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min progressive\nloading'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:19,m:5,mi:'~28 mi',cb:false,focus:'CONSOLIDATE GAINS · Consistency over volume. Rest up for benchmark 5K.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min full body'},{d:'Thu',e:'⚡',t:'Tempo',x:'7 mi total:\n1 warm-up\n4 mi TEMPO\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:20,m:5,mi:'~21 mi',cb:true,focus:'⬇ CUTBACK WEEK · Fresh legs for benchmark 5K race coming up!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min maintenance'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'—',t:'Rest',x:'Rest'},{d:'Sun',e:'🎯',t:'Long Run',x:'10 mi easy'}]},
+  {w:21,m:6,mi:'~28 mi',cb:false,focus:'PEAK MONTH · Longest tempo yet (5 miles). You\'ve transformed as a runner.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min race-prep\nexplosiveness'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'13 mi easy'}]},
+  {w:22,m:6,mi:'~30 mi',cb:false,focus:'PHASE 1 PEAK · 30 mpw achieved! Peak long run: 14 miles.',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'6.5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'45 min progressive'},{d:'Thu',e:'⚡',t:'Tempo',x:'8 mi total:\n1.5 warm-up\n5 mi TEMPO\n1.5 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'14 mi easy'}]},
+  {w:23,m:6,mi:'~22 mi',cb:false,focus:'5K RACE WEEK · Target sub-32:00. Race your heart out!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'5 mi easy'},{d:'Wed',e:'💪',t:'Strength',x:'30 min light —\nno soreness pre-race'},{d:'Thu',e:'⚡',t:'Tempo',x:'4 mi tune-up:\n1 warm-up\n2 mi at 5K effort\n1 cool-down'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'2 mi shakeout\n+ 4 strides'},{d:'Sun',e:'🏁',t:'Race',x:'5K Benchmark\nTarget: sub-32:00'}]},
+  {w:24,m:6,mi:'~20 mi',cb:false,focus:'PHASE 1 COMPLETE · Ready for Phase 2: speed work & half marathon training!',
+   wo:[{d:'Mon',e:'—',t:'Rest',x:'Rest'},{d:'Tue',e:'🏃',t:'Easy Run',x:'4 mi easy\n(tired legs ok)'},{d:'Wed',e:'💪',t:'Strength',x:'30 min full body\nReturn to normal'},{d:'Thu',e:'🏃',t:'Easy Run',x:'4 mi easy'},{d:'Fri',e:'—',t:'Rest',x:'Rest'},{d:'Sat',e:'🏃',t:'Easy Run',x:'3 mi easy'},{d:'Sun',e:'🎯',t:'Long Run',x:'9 mi easy\nJust enjoy the miles'}]},
+];
+
+const mNames = {1:'Month 1 — Rebuild',2:'Month 2 — Steady Build',3:'Month 3 — Milestone',4:'Month 4 — Exceed Prior Peak',5:'Month 5 — First Tempo',6:'Month 6 — Peak'};
+
+function tc(t) {
+  const s = t.toLowerCase();
+  if (s==='rest') return 't-rest';
+  if (s.includes('easy')) return 't-easy';
+  if (s.includes('long')) return 't-long';
+  if (s.includes('tempo')||s.includes('moderate')||s.includes('race')) return 't-tempo';
+  if (s.includes('strength')) return 't-str';
+  if (s.includes('cross')) return 't-cross';
+  return 't-rest';
+}
+
+function load() { try { return JSON.parse(localStorage.getItem('bq_p1')||'{}'); } catch(e) { return {}; } }
+function save(s) { try { localStorage.setItem('bq_p1',JSON.stringify(s)); } catch(e) {} }
+let S = load();
+
+const total = weeks.reduce((a,w)=>a+w.wo.length,0);
+
+function getDayWorkout() {
+  const m = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+  const today = m[new Date().getDay()];
+  for (const w of weeks) {
+    if (w.wo.every((_,i)=>S[`w${w.w}_${i}`])) continue;
+    const wo = w.wo.find(x=>x.d===today && x.t!=='Rest');
+    if (wo) return {week:w.w, wo};
+  }
+  return null;
+}
+
+function stats() {
+  const done = Object.values(S).filter(Boolean).length;
+  const wksDone = weeks.filter(w=>w.wo.every((_,i)=>S[`w${w.w}_${i}`])).length;
+  const pct = Math.round(done/total*100);
+  document.getElementById('sv-done').textContent = done;
+  document.getElementById('sv-wks').textContent = wksDone;
+  document.getElementById('sv-pct').textContent = pct+'%';
+  document.getElementById('sv-rem').textContent = total-done;
+  document.getElementById('prog-fill').style.width = Math.max(pct,0.5)+'%';
+  document.getElementById('pct-lbl').textContent = pct+'% complete';
+
+  const tw = getDayWorkout();
+  document.getElementById('today-title').textContent = tw ? `Today's Workout — Week ${tw.week}` : 'Rest Day';
+  document.getElementById('today-sub').textContent = tw ? `${tw.wo.t}: ${tw.wo.x.split('\n')[0]}` : 'No workout today — recover well!';
+
+  weeks.forEach(w=>{
+    const card = document.querySelector(`[data-w="${w.w}"]`);
+    if (!card) return;
+    const d = w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length;
+    card.querySelector('.wk-prog').textContent = `${d}/${w.wo.length}`;
+    card.querySelector('.wk-prog').className = 'wk-prog'+(d===w.wo.length?' done':'');
+    card.classList.toggle('completed-week', d===w.wo.length);
+  });
+}
+
+function filterMonth(m, btn) {
+  document.querySelectorAll('.mth-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.month-group').forEach(g=>{
+    g.classList.toggle('hidden', m!=='all' && +g.dataset.m !== m);
+  });
+}
+
+function render() {
+  const main = document.getElementById('main');
+  main.innerHTML = '';
+  const months = [...new Set(weeks.map(w=>w.m))];
+  months.forEach(m => {
+    const mg = document.createElement('div');
+    mg.className = 'month-group'; mg.dataset.m = m;
+    mg.innerHTML = `<div class="month-hdr"><div class="month-line"></div><div class="month-lbl">${mNames[m]}</div><div class="month-line"></div></div>`;
+    weeks.filter(w=>w.m===m).forEach(w=>{
+      const done = w.wo.filter((_,i)=>S[`w${w.w}_${i}`]).length;
+      const all = done===w.wo.length;
+      const card = document.createElement('div');
+      card.className = 'week-card'+(w.cb?' cutback':'')+(all?' completed-week':'');
+      card.dataset.w = w.w;
+      card.innerHTML = `
+        <div class="week-hdr" onclick="this.closest('.week-card').classList.toggle('open')">
+          <div class="wk-num"><div class="wk-num-big">${w.w}</div><div class="wk-num-lbl">WK</div></div>
+          <div class="vdiv"></div>
+          <div class="wk-mi">${w.mi}</div>
+          <div class="vdiv"></div>
+          <span class="wk-prog${all?' done':''}">${done}/${w.wo.length}</span>
+          <div class="complete-ring">
+            <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="week-notes">${w.focus.replace(/\n/g,'<br>')}</div>
+        <div class="workouts-grid">
+          ${w.wo.map((wo,i)=>`
+            <div class="wo-tile ${tc(wo.t)}${S[`w${w.w}_${i}`]?' done':''}" onclick="tog('w${w.w}_${i}',this)">
+              <div class="tile-top">${wo.d}<div class="tile-chk"></div></div>
+              <div class="tile-bubble">${wo.e}</div>
+              <div class="tile-type">${wo.t}</div>
+              <div class="tile-detail">${wo.x.replace(/\n/g,'<br>')}</div>
+            </div>`).join('')}
+        </div>`;
+      mg.appendChild(card);
+    });
+    main.appendChild(mg);
+  });
+  stats();
+}
+
+function tog(k, tile) {
+  S[k] = !S[k];
+  tile.classList.toggle('done', S[k]);
+  save(S); stats();
+}
+
+render();
+</script>
+</body>
+</html>
